@@ -71,12 +71,6 @@ Dự án phát triển một trang web bán hoa trực tuyến nhằm cung cấp
 4. Gửi thông tin đơn hàng đến backend, lưu vào bảng `orders` và `order_details`.
 5. Quản trị viên xem và xử lý đơn hàng qua giao diện admin.
 
-## 4. Kết quả đạt được
-
-- **Chức năng**:
-  - Trang web hoàn thiện các chức năng cơ bản: xem sản phẩm, thêm vào giỏ hàng, đặt hàng.
-  - Giao diện quản trị cho phép thêm/sửa/xóa sản phẩm và quản lý đơn hàng.
-
 ## 5. Bảo mật
 
 - **Validation Input**: Áp dụng kiểm tra và xác thực đầu vào (input validation) trên các form như đăng ký, đăng nhập, và đặt hàng để ngăn chặn các cuộc tấn công như SQL Injection và Cross-Site Scripting (XSS).
