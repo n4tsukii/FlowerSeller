@@ -48,7 +48,7 @@
           <img src={{asset('assets/admin/dist/img/avatar.png') }} class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">TaDinhDuy</a>
+          <a href="#" class="d-block">Thuat Pham</a>
         </div>
       </div>
       <nav class="mt-2">
@@ -196,7 +196,7 @@
     <div class="float-right d-none d-sm-block">
       <b>Phiên bản</b> 3.2.0
     </div>
-    <strong>Sửa bởi: Ta Dinh Duy</strong> Tất cả các quyền được bảo lưu.
+    <strong>Sửa bởi: Thuat Pham</strong> Tất cả các quyền được bảo lưu.
   </footer>
 
   <aside class="control-sidebar control-sidebar-dark">
