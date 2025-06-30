@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Trash Orders')
+@section('title', 'Thùng rác Đơn hàng')
 @section('content')
 <div class="content-wrapper">
     <section class="content-header">
@@ -7,15 +7,15 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="text-gradient fw-bold">
-                        <i class="fas fa-trash me-2"></i>Trash Orders
+                        <i class="fas fa-trash me-2"></i>Thùng rác Đơn hàng
                     </h1>
                 </div>
                 <div class="col-sm-6">
                     <nav aria-label="breadcrumb" class="float-sm-right">
                         <ol class="breadcrumb bg-transparent mb-0">
-                            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}" class="text-primary">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.order.index') }}" class="text-primary">Orders</a></li>
-                            <li class="breadcrumb-item active text-secondary">Trash</li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}" class="text-primary">Bảng điều khiển</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.order.index') }}" class="text-primary">Đơn hàng</a></li>
+                            <li class="breadcrumb-item active text-secondary">Thùng rác</li>
                         </ol>
                     </nav>
                 </div>
@@ -29,13 +29,13 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <h4 class="mb-0 fw-bold">
-                            <i class="fas fa-trash me-2"></i>Deleted Orders
+                            <i class="fas fa-trash me-2"></i>Đơn hàng đã xóa
                         </h4>
-                        <small class="opacity-75">Restore or permanently delete orders</small>
+                        <small class="opacity-75">Khôi phục hoặc xóa vĩnh viễn đơn hàng</small>
                     </div>
                     <div class="col-md-6 text-end">
                         <a href="{{ route('admin.order.index') }}" class="btn btn-light btn-sm rounded-pill shadow-sm hover-lift">
-                            <i class="fas fa-arrow-left me-1"></i>Back to Orders
+                            <i class="fas fa-arrow-left me-1"></i>Quay lại Đơn hàng
                         </a>
                     </div>
                 </div>
@@ -47,16 +47,16 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th class="border-0 py-3">
-                                        <i class="fas fa-user me-2 text-primary"></i>Customer
+                                        <i class="fas fa-user me-2 text-primary"></i>Khách hàng
                                     </th>
                                     <th class="border-0 py-3">
-                                        <i class="fas fa-truck me-2 text-success"></i>Delivery Info
+                                        <i class="fas fa-truck me-2 text-success"></i>Thông tin giao hàng
                                     </th>
                                     <th class="border-0 py-3">
-                                        <i class="fas fa-envelope me-2 text-info"></i>Contact
+                                        <i class="fas fa-envelope me-2 text-info"></i>Liên hệ
                                     </th>
                                     <th class="text-center border-0 py-3">
-                                        <i class="fas fa-cogs me-2 text-dark"></i>Actions
+                                        <i class="fas fa-cogs me-2 text-dark"></i>Thao tác
                                     </th>
                                 </tr>
                             </thead>
@@ -70,7 +70,7 @@
                                             </div>
                                             <div>
                                                 <div class="fw-bold text-dark">{{ $row->name }}</div>
-                                                <small class="text-muted">Order ID: {{ $row->id }}</small>
+                                                <small class="text-muted">ID Đơn hàng: {{ $row->id }}</small>
                                             </div>
                                         </div>
                                     </td>
@@ -80,11 +80,11 @@
                                             <div class="d-flex align-items-center mt-1">
                                                 @if ($row->delivery_gender == 1)
                                                     <span class="badge bg-primary rounded-pill me-2">
-                                                        <i class="fas fa-mars me-1"></i>Male
+                                                        <i class="fas fa-mars me-1"></i>Nam
                                                     </span>
                                                 @elseif ($row->delivery_gender == 2)
                                                     <span class="badge bg-pink rounded-pill me-2">
-                                                        <i class="fas fa-venus me-1"></i>Female
+                                                        <i class="fas fa-venus me-1"></i>Nữ
                                                     </span>
                                                 @endif
                                             </div>

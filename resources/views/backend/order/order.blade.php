@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Orders Management')
+@section('title','Quản lý Đơn hàng')
 @section('content')
 <div class="content-wrapper">
     <!-- CONTENT -->
@@ -8,14 +8,14 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="text-gradient fw-bold">
-              <i class="fas fa-shopping-cart me-2"></i>Orders Management
+              <i class="fas fa-shopping-cart me-2"></i>Quản lý Đơn hàng
             </h1>
           </div>
           <div class="col-sm-6">
             <nav aria-label="breadcrumb" class="float-sm-right">
               <ol class="breadcrumb bg-transparent mb-0">
-                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}" class="text-primary">Dashboard</a></li>
-                <li class="breadcrumb-item active text-secondary">Orders</li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}" class="text-primary">Bảng điều khiển</a></li>
+                <li class="breadcrumb-item active text-secondary">Đơn hàng</li>
               </ol>
             </nav>
           </div>
@@ -29,9 +29,9 @@
           <div class="row align-items-center">
             <div class="col-md-6">
               <h4 class="mb-0 fw-bold">
-                <i class="fas fa-shopping-cart me-2"></i>All Orders
+                <i class="fas fa-shopping-cart me-2"></i>Tất cả Đơn hàng
               </h4>
-              <small class="opacity-75">Manage customer orders and deliveries</small>
+              <small class="opacity-75">Quản lý đơn hàng và giao hàng khách hàng</small>
             </div>
             <div class="col-md-6">
               <!-- Search and Filter -->
@@ -41,14 +41,14 @@
                     <span class="input-group-text bg-white border-end-0">
                       <i class="fas fa-search text-muted"></i>
                     </span>
-                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Search orders..." id="searchInput">
+                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Tìm kiếm đơn hàng..." id="searchInput">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <select class="form-select" id="statusFilter">
-                    <option value="">All Status</option>
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
+                    <option value="">Tất cả đơn hàng</option>
+                    <option value="has-products">Có sản phẩm</option>
+                    <option value="no-products">Chưa có sản phẩm</option>
                   </select>
                 </div>
               </div>
@@ -59,7 +59,7 @@
           <div class="row mt-3">
             <div class="col-12 text-end">
               <a href="{{ route('admin.order.trash') }}" class="btn btn-outline-light btn-sm rounded-pill shadow-sm hover-lift">
-                <i class="fas fa-trash me-1"></i>Trash Bin
+                <i class="fas fa-trash me-1"></i>Thùng rác
               </a>
             </div>
           </div>
@@ -70,22 +70,25 @@
               <thead class="bg-light">
                 <tr>
                   <th class="border-0 py-3">
-                    <i class="fas fa-user me-2 text-primary"></i>Customer
+                    <i class="fas fa-user me-2 text-primary"></i>Khách hàng & Thời gian
                   </th>
                   <th class="border-0 py-3">
-                    <i class="fas fa-truck me-2 text-success"></i>Delivery Info
+                    <i class="fas fa-truck me-2 text-success"></i>Giao hàng
                   </th>
                   <th class="border-0 py-3">
-                    <i class="fas fa-envelope me-2 text-info"></i>Contact
+                    <i class="fas fa-envelope me-2 text-info"></i>Liên hệ
                   </th>
                   <th class="border-0 py-3">
-                    <i class="fas fa-sticky-note me-2 text-warning"></i>Note
+                    <i class="fas fa-box me-2 text-warning"></i>Sản phẩm
+                  </th>
+                  <th class="border-0 py-3">
+                    <i class="fas fa-money-bill-wave me-2 text-success"></i>Tổng tiền
+                  </th>
+                  <th class="border-0 py-3">
+                    <i class="fas fa-sticky-note me-2 text-secondary"></i>Ghi chú
                   </th>
                   <th class="text-center border-0 py-3">
-                    <i class="fas fa-toggle-on me-2 text-secondary"></i>Status
-                  </th>
-                  <th class="text-center border-0 py-3">
-                    <i class="fas fa-cogs me-2 text-dark"></i>Actions
+                    <i class="fas fa-cogs me-2 text-dark"></i>Thao tác
                   </th>
                 </tr>
               </thead>
@@ -99,89 +102,74 @@
                         </div>
                         <div>
                           <div class="fw-bold text-dark">{{ $row->name }}</div>
-                          <small class="text-muted">ID: {{ $row->id }}</small>
+                          <small class="text-muted">ID: #{{ $row->orderid }}</small>
+                          <div class="small text-info">
+                            <i class="fas fa-calendar me-1"></i>{{ date('d/m/Y H:i', strtotime($row->created_at)) }}
+                          </div>
                         </div>
                       </div>
                     </td>
                     <td class="align-middle">
                       <div class="delivery-info">
-                        <div class="fw-bold text-dark">{{ $row->delivery_name }}</div>
-                        <div class="d-flex align-items-center mt-1">
-                          @if ($row->delivery_gender == 1)
-                            <span class="badge bg-primary rounded-pill me-2">
-                              <i class="fas fa-mars me-1"></i>Male
-                            </span>
-                          @elseif ($row->delivery_gender == 2)
-                            <span class="badge bg-pink rounded-pill me-2">
-                              <i class="fas fa-venus me-1"></i>Female
-                            </span>
-                          @endif
+                        <span class="text-muted fst-italic">
+                          <i class="fas fa-info-circle me-1"></i>Thông tin giao hàng sẽ được cập nhật từ đơn hàng
+                        </span>
+                        <div class="mt-1">
+                          <small class="text-secondary">Đơn hàng được tạo bởi khách hàng</small>
                         </div>
-                        <small class="text-muted">
-                          <i class="fas fa-map-marker-alt me-1"></i>{{ Str::limit($row->delivery_address, 30) }}
-                        </small>
                       </div>
                     </td>
                     <td class="align-middle">
                       <div class="contact-info">
-                        <div class="mb-1">
-                          <i class="fas fa-envelope me-2 text-info"></i>
-                          <span class="text-dark">{{ $row->delivery_email }}</span>
-                        </div>
-                        <div>
-                          <i class="fas fa-phone me-2 text-success"></i>
-                          <span class="text-dark">{{ $row->delivery_phone }}</span>
+                        <span class="text-muted fst-italic">
+                          <i class="fas fa-info-circle me-1"></i>Thông tin liên hệ sẽ được cập nhật từ thông tin khách hàng
+                        </span>
+                        <div class="mt-1">
+                          <small class="text-secondary">User ID: {{ $row->user_id }}</small>
                         </div>
                       </div>
                     </td>
                     <td class="align-middle">
-                      <div class="text-muted">
-                        {{ Str::limit($row->note, 40) ?: 'No notes' }}
+                      <div class="product-info text-center">
+                        <span class="badge bg-gradient-primary rounded-pill px-3 py-2">
+                          <i class="fas fa-box me-1"></i>{{ $row->total_products ?: 0 }} sản phẩm
+                        </span>
                       </div>
                     </td>
-                    <td class="text-center align-middle">
-                      @if ($row->status == 1)
-                        <span class="badge bg-gradient-success rounded-pill px-3 py-2">
-                          <i class="fas fa-check-circle me-1"></i>Active
+                    <td class="align-middle">
+                      <div class="amount-info text-center">
+                        @if($row->total_amount && $row->total_amount > 0)
+                          <span class="badge bg-gradient-success rounded-pill px-3 py-2 fw-bold">
+                            <i class="fas fa-money-bill-wave me-1"></i>{{ number_format($row->total_amount, 0, ',', '.') }} VNĐ
+                          </span>
+                        @else
+                          <span class="badge bg-gradient-secondary rounded-pill px-3 py-2">
+                            <i class="fas fa-minus me-1"></i>Chưa có giá trị
+                          </span>
+                        @endif
+                      </div>
+                    </td>
+                    <td class="align-middle">
+                      <div class="text-muted">
+                        <span class="fst-italic">
+                          <i class="fas fa-info-circle me-1"></i>Ghi chú sẽ được cập nhật khi chỉnh sửa đơn hàng
                         </span>
-                      @else
-                        <span class="badge bg-gradient-secondary rounded-pill px-3 py-2">
-                          <i class="fas fa-pause-circle me-1"></i>Inactive
-                        </span>
-                      @endif
+                      </div>
                     </td>
                     <td class="text-center align-middle">
                       @php
                           $args = ['id' => $row->orderid ?? $row->id];
                       @endphp
                       <div class="btn-group" role="group">
-                        @if ($row->status==1)
-                        <a href="{{ route('admin.order.status', $args) }}" 
-                           class="btn btn-sm btn-outline-success rounded-pill me-1 hover-lift"
-                           title="Deactivate">
-                            <i class="fas fa-toggle-on"></i>
-                        </a>
-                        @else
-                        <a href="{{ route('admin.order.status', $args) }}" 
-                           class="btn btn-sm btn-outline-secondary rounded-pill me-1 hover-lift"
-                           title="Activate">
-                            <i class="fas fa-toggle-off"></i>
-                        </a>
-                        @endif
-                        <a href="{{ route('admin.order.show', $args) }}" 
-                           class="btn btn-sm btn-outline-info rounded-pill me-1 hover-lift"
-                           title="View Details">
-                            <i class="fas fa-eye"></i>
-                        </a>
                         <a href="{{ route('admin.order.edit', $args) }}" 
                            class="btn btn-sm btn-outline-primary rounded-pill me-1 hover-lift"
-                           title="Edit">
+                           title="Chỉnh sửa">
                             <i class="fas fa-edit"></i>
                         </a>
                         <a href="{{ route('admin.order.delete', $args) }}" 
                            class="btn btn-sm btn-outline-danger rounded-pill hover-lift"
-                           title="Delete"
-                           onclick="return confirm('Are you sure you want to delete this order?')">
+                           title="Xóa"
+                           onclick="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này?')">
                             <i class="fas fa-trash"></i>
                         </a>
                       </div>
@@ -213,12 +201,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const customer = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
             const delivery = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
             const contact = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            const status = row.getAttribute('data-status');
+            const products = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+            const amount = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+            const note = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
             
             const matchesSearch = customer.includes(searchTerm) || 
                                 delivery.includes(searchTerm) || 
-                                contact.includes(searchTerm);
-            const matchesStatus = statusValue === '' || status === statusValue;
+                                contact.includes(searchTerm) ||
+                                products.includes(searchTerm) ||
+                                amount.includes(searchTerm) ||
+                                note.includes(searchTerm);
+            
+            let matchesStatus = true;
+            if (statusValue === 'has-products') {
+                matchesStatus = !products.includes('0 sản phẩm');
+            } else if (statusValue === 'no-products') {
+                matchesStatus = products.includes('0 sản phẩm');
+            }
             
             if (matchesSearch && matchesStatus) {
                 row.style.display = '';
@@ -315,7 +314,29 @@ tbody tr:hover {
 }
 
 .delivery-info, .contact-info {
-    min-width: 200px;
+    min-width: 180px;
+}
+
+.product-info, .amount-info {
+    min-width: 120px;
+}
+
+.product-info .badge,
+.amount-info .badge {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(45deg, #56ab2f 0%, #a8e6cf 100%);
+}
+
+.bg-gradient-secondary {
+    background: linear-gradient(45deg, #bdc3c7 0%, #6c757d 100%);
 }
 </style>
 

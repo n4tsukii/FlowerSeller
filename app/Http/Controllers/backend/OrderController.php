@@ -15,10 +15,20 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $list= Order::where('order.status','!=',0)->orderBy('order.created_at','desc')
-        ->join('user','user.id','=','order.user_id')
-        ->select("order.id as orderid","order.*","user.name")
-        ->get();
+        $list = Order::where('order.status','!=',0)
+            ->orderBy('order.created_at','desc')
+            ->join('user','user.id','=','order.user_id')
+            ->leftJoin('orderdetail', 'order.id', '=', 'orderdetail.order_id')
+            ->select(
+                "order.id as orderid",
+                "order.*",
+                "user.name",
+                \DB::raw('COUNT(orderdetail.order_id) as total_products'),
+                \DB::raw('SUM(orderdetail.amount) as total_amount')
+            )
+            ->groupBy('order.id', 'order.user_id', 'order.status', 'order.created_at', 
+                     'order.updated_at', 'order.updated_by', 'user.name')
+            ->get();
         return view("backend.order.order",compact('list'));
     }
 
@@ -65,15 +75,11 @@ class OrderController extends Controller
             toastr()->error('The item does not exist.');
             return redirect()->route('admin.order.index');
         }
-        $order->delivery_name =$request->delivery_name;
-        $order->delivery_gender =$request->delivery_gender;
-        $order->delivery_email =$request->delivery_email;
-        $order->delivery_phone =$request->delivery_phone;
-        $order->delivery_address =$request->delivery_address;
-        $order->note =$request->note;
-        $order->updated_at =date('Y-m-d H:i:s');
-        // $order->created_by =Auth::id()??1;
-        $order->status = $request->status;
+        // Chỉ cập nhật các field có trong bảng order
+        $order->status = $request->status ?? $order->status;
+        $order->updated_at = date('Y-m-d H:i:s');
+        $order->updated_by = Auth::id() ?? 1;
+        
         if ($order->save()) {
             toastr()->success('Updated successfully!');
         }

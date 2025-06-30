@@ -30,20 +30,20 @@
           <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
             <div class="card-header bg-gradient-success text-white border-0 py-4">
               <h5 class="mb-0 fw-bold">
-                <i class="fas fa-plus-circle me-2"></i>Add New Category
+                <i class="fas fa-plus-circle me-2"></i>Thêm danh mục mới
               </h5>
-              <small class="opacity-75">Create a new product category</small>
+              <small class="opacity-75">Tạo danh mục sản phẩm mới</small>
             </div>
             <div class="card-body p-4">
               <form action="{{ route('admin.category.store') }}" method="post" enctype="multipart/form-data" id="categoryForm">
                 @csrf
                 <div class="mb-3">
                   <label for="name" class="form-label fw-bold">
-                    <i class="fas fa-tag me-2 text-primary"></i>Category Name
+                    <i class="fas fa-tag me-2 text-primary"></i>Tên danh mục
                   </label>
                   <input type="text" value="{{ old('name') }}" name="name" id="name" 
                          class="form-control form-control-lg rounded-3 shadow-sm" 
-                         placeholder="Enter category name">
+                         placeholder="Nhập tên danh mục">
                   @error('name')
                     <div class="text-danger mt-1"><i class="fas fa-exclamation-triangle me-1"></i>{{ $message }}</div>
                   @enderror
@@ -51,11 +51,11 @@
                 
                 <div class="mb-3">
                   <label for="description" class="form-label fw-bold">
-                    <i class="fas fa-align-left me-2 text-info"></i>Description
+                    <i class="fas fa-align-left me-2 text-info"></i>Mô tả
                   </label>
                   <textarea name="description" id="description" rows="3" 
                             class="form-control rounded-3 shadow-sm" 
-                            placeholder="Enter category description">{{ old('description') }}</textarea>
+                            placeholder="Nhập mô tả danh mục">{{ old('description') }}</textarea>
                   @error('description')
                     <div class="text-danger mt-1"><i class="fas fa-exclamation-triangle me-1"></i>{{ $message }}</div>
                   @enderror
@@ -63,10 +63,10 @@
                 
                 <div class="mb-3">
                   <label for="parent_id" class="form-label fw-bold">
-                    <i class="fas fa-sitemap me-2 text-warning"></i>Parent Category
+                    <i class="fas fa-sitemap me-2 text-warning"></i>Danh mục cha
                   </label>
                   <select name="parent_id" id="parent_id" class="form-select rounded-3 shadow-sm">
-                    <option value="0">Root Category</option>
+                    <option value="0">Danh mục gốc</option>
                     {!! $htmlparentid !!}
                   </select>
                   @error('parent_id')
@@ -76,10 +76,10 @@
                 
                 <div class="mb-3">
                   <label for="sort_order" class="form-label fw-bold">
-                    <i class="fas fa-sort me-2 text-secondary"></i>Sort Order
+                    <i class="fas fa-sort me-2 text-secondary"></i>Thứ tự sắp xếp
                   </label>
                   <select name="sort_order" id="sort_order" class="form-select rounded-3 shadow-sm">
-                    <option value="">Choose position</option>
+                    <option value="">Chọn vị trí</option>
                     {!! $htmlsortorder !!}
                   </select>
                   @error('sort_order')
@@ -89,7 +89,7 @@
                 
                 <div class="mb-3">
                   <label for="image" class="form-label fw-bold">
-                    <i class="fas fa-image me-2 text-primary"></i>Category Image
+                    <i class="fas fa-image me-2 text-primary"></i>Hình ảnh danh mục
                   </label>
                   <input type="file" name="image" id="image" 
                          class="form-control rounded-3 shadow-sm" 
@@ -101,11 +101,11 @@
                 
                 <div class="mb-4">
                   <label for="status" class="form-label fw-bold">
-                    <i class="fas fa-toggle-on me-2 text-success"></i>Status
+                    <i class="fas fa-toggle-on me-2 text-success"></i>Trạng thái
                   </label>
                   <select name="status" id="status" class="form-select rounded-3 shadow-sm">
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
+                    <option value="1">Kích hoạt</option>
+                    <option value="0">Tạm dừng</option>
                   </select>
                   @error('status')
                     <div class="text-danger mt-1"><i class="fas fa-exclamation-triangle me-1"></i>{{ $message }}</div>
@@ -114,7 +114,7 @@
                 
                 <div class="d-grid">
                   <button type="submit" class="btn btn-gradient-success btn-lg rounded-pill shadow hover-lift">
-                    <i class="fas fa-plus me-2"></i>Add Category
+                    <i class="fas fa-plus me-2"></i>Thêm danh mục
                   </button>
                 </div>
               </form>
@@ -129,13 +129,13 @@
               <div class="row align-items-center">
                 <div class="col-md-6">
                   <h4 class="mb-0 fw-bold">
-                    <i class="fas fa-sitemap me-2"></i>All Categories
+                    <i class="fas fa-sitemap me-2"></i>Tất cả danh mục
                   </h4>
-                  <small class="opacity-75">Manage product categories</small>
+                  <small class="opacity-75">Quản lý danh mục sản phẩm</small>
                 </div>
                 <div class="col-md-6 text-end">
                   <a href="{{ route('admin.category.trash') }}" class="btn btn-outline-light btn-sm rounded-pill shadow-sm hover-lift">
-                    <i class="fas fa-trash me-1"></i>Trash Bin
+                    <i class="fas fa-trash me-1"></i>Thùng rác
                   </a>
                 </div>
               </div>
@@ -146,19 +146,19 @@
                   <thead class="bg-light">
                     <tr>
                       <th class="border-0 py-3">
-                        <i class="fas fa-image me-2 text-primary"></i>Image
+                        <i class="fas fa-image me-2 text-primary"></i>Hình ảnh
                       </th>
                       <th class="border-0 py-3">
-                        <i class="fas fa-tag me-2 text-success"></i>Category
+                        <i class="fas fa-tag me-2 text-success"></i>Danh mục
                       </th>
                       <th class="border-0 py-3">
-                        <i class="fas fa-sitemap me-2 text-info"></i>Parent
+                        <i class="fas fa-sitemap me-2 text-info"></i>Danh mục cha
                       </th>
                       <th class="border-0 py-3">
-                        <i class="fas fa-link me-2 text-warning"></i>Slug
+                        <i class="fas fa-link me-2 text-warning"></i>Đường dẫn
                       </th>
                       <th class="text-center border-0 py-3">
-                        <i class="fas fa-cogs me-2 text-dark"></i>Actions
+                        <i class="fas fa-cogs me-2 text-dark"></i>Thao tác
                       </th>
                     </tr>
                   </thead>
@@ -167,8 +167,18 @@
                       <tr class="category-row border-bottom" data-status="{{ $row->status }}">
                         <td class="align-middle">
                           <div class="category-image-container">
-                            @if($row->image && file_exists(public_path('images/categorys/'.$row->image)))
-                              <img src="{{ asset('images/categorys/'.$row->image) }}" 
+                            @if($row->slug && file_exists(public_path('images/categories/'.$row->slug.'.png')))
+                              <img src="{{ asset('images/categories/'.$row->slug.'.png') }}" 
+                                   alt="{{ $row->name }}" 
+                                   class="rounded-3 shadow-sm"
+                                   style="width: 50px; height: 50px; object-fit: cover;">
+                            @elseif($row->slug && file_exists(public_path('images/categories/'.$row->slug.'.jpg')))
+                              <img src="{{ asset('images/categories/'.$row->slug.'.jpg') }}" 
+                                   alt="{{ $row->name }}" 
+                                   class="rounded-3 shadow-sm"
+                                   style="width: 50px; height: 50px; object-fit: cover;">
+                            @elseif($row->slug && file_exists(public_path('images/categories/'.$row->slug.'.jpeg')))
+                              <img src="{{ asset('images/categories/'.$row->slug.'.jpeg') }}" 
                                    alt="{{ $row->name }}" 
                                    class="rounded-3 shadow-sm"
                                    style="width: 50px; height: 50px; object-fit: cover;">
@@ -190,7 +200,7 @@
                         <td class="align-middle">
                           @if($row->parent_id == 0)
                             <span class="badge bg-gradient-primary rounded-pill px-3 py-2">
-                              <i class="fas fa-crown me-1"></i>Root
+                              <i class="fas fa-crown me-1"></i>Gốc
                             </span>
                           @else
                             <span class="badge bg-gradient-secondary rounded-pill px-3 py-2">
@@ -211,30 +221,25 @@
                             @if ($row->status==1)
                             <a href="{{ route('admin.category.status', $args) }}" 
                                class="btn btn-sm btn-outline-success rounded-pill me-1 hover-lift"
-                               title="Deactivate">
+                               title="Tạm dừng">
                                 <i class="fas fa-toggle-on"></i>
                             </a>
                             @else
                             <a href="{{ route('admin.category.status', $args) }}" 
                                class="btn btn-sm btn-outline-secondary rounded-pill me-1 hover-lift"
-                               title="Activate">
+                               title="Kích hoạt">
                                 <i class="fas fa-toggle-off"></i>
                             </a>
                             @endif
-                            <a href="{{ route('admin.category.show', $args) }}" 
-                               class="btn btn-sm btn-outline-info rounded-pill me-1 hover-lift"
-                               title="View Details">
-                                <i class="fas fa-eye"></i>
-                            </a>
                             <a href="{{ route('admin.category.edit', $args) }}" 
                                class="btn btn-sm btn-outline-primary rounded-pill me-1 hover-lift"
-                               title="Edit">
+                               title="Chỉnh sửa">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a href="{{ route('admin.category.delete', $args) }}" 
                                class="btn btn-sm btn-outline-danger rounded-pill hover-lift"
-                               title="Delete"
-                               onclick="return confirm('Are you sure you want to delete this category?')">
+                               title="Xóa"
+                               onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">
                                 <i class="fas fa-trash"></i>
                             </a>
                           </div>

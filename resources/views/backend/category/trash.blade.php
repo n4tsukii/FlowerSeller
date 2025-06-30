@@ -66,8 +66,18 @@
                                     <td class="align-middle">
                                         <div class="d-flex align-items-center">
                                             <div class="category-image me-3">
-                                                @if($row->image && file_exists(public_path('images/categorys/'.$row->image)))
-                                                    <img src="{{ asset('images/categorys/'.$row->image) }}" 
+                                                @if($row->slug && file_exists(public_path('images/categories/'.$row->slug.'.png')))
+                                                    <img src="{{ asset('images/categories/'.$row->slug.'.png') }}" 
+                                                         alt="{{ $row->name }}" 
+                                                         class="rounded-3 shadow-sm" 
+                                                         style="width: 60px; height: 60px; object-fit: cover;">
+                                                @elseif($row->slug && file_exists(public_path('images/categories/'.$row->slug.'.jpg')))
+                                                    <img src="{{ asset('images/categories/'.$row->slug.'.jpg') }}" 
+                                                         alt="{{ $row->name }}" 
+                                                         class="rounded-3 shadow-sm" 
+                                                         style="width: 60px; height: 60px; object-fit: cover;">
+                                                @elseif($row->slug && file_exists(public_path('images/categories/'.$row->slug.'.jpeg')))
+                                                    <img src="{{ asset('images/categories/'.$row->slug.'.jpeg') }}" 
                                                          alt="{{ $row->name }}" 
                                                          class="rounded-3 shadow-sm" 
                                                          style="width: 60px; height: 60px; object-fit: cover;">

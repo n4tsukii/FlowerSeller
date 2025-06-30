@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Posts Management')
+@section('title','Quản lý bài viết')
 @section('content')
 <div class="content-wrapper">
     <!-- CONTENT -->
@@ -8,14 +8,14 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="text-gradient fw-bold">
-              <i class="fas fa-blog me-2"></i>Posts Management
+              <i class="fas fa-blog me-2"></i>Quản lý bài viết
             </h1>
           </div>
           <div class="col-sm-6">
             <nav aria-label="breadcrumb" class="float-sm-right">
               <ol class="breadcrumb bg-transparent mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}" class="text-primary">Dashboard</a></li>
-                <li class="breadcrumb-item active text-secondary">Posts</li>
+                <li class="breadcrumb-item active text-secondary">Bài viết</li>
               </ol>
             </nav>
           </div>
@@ -29,9 +29,9 @@
           <div class="row align-items-center">
             <div class="col-md-6">
               <h4 class="mb-0 fw-bold">
-                <i class="fas fa-blog me-2"></i>All Posts
+                <i class="fas fa-blog me-2"></i>Tất cả bài viết
               </h4>
-              <small class="opacity-75">Manage your blog posts and articles</small>
+              <small class="opacity-75">Quản lý bài viết và tin tức</small>
             </div>
             <div class="col-md-6">
               <!-- Search and Filter -->
@@ -41,14 +41,14 @@
                     <span class="input-group-text bg-white border-end-0">
                       <i class="fas fa-search text-muted"></i>
                     </span>
-                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Search posts..." id="searchInput">
+                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Tìm kiếm bài viết..." id="searchInput">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <select class="form-select" id="statusFilter">
-                    <option value="">All Status</option>
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="1">Hoạt động</option>
+                    <option value="0">Tạm dừng</option>
                   </select>
                 </div>
               </div>
@@ -59,10 +59,10 @@
           <div class="row mt-3">
             <div class="col-12 text-end">
               <a href="{{route('admin.post.create')}}" class="btn btn-light btn-sm rounded-pill shadow-sm me-2 hover-lift">
-                <i class="fas fa-plus me-1"></i>Add New Post
+                <i class="fas fa-plus me-1"></i>Thêm bài viết
               </a>
               <a href="{{ route('admin.post.trash') }}" class="btn btn-outline-light btn-sm rounded-pill shadow-sm hover-lift">
-                <i class="fas fa-trash me-1"></i>Trash Bin
+                <i class="fas fa-trash me-1"></i>Thùng rác
               </a>
             </div>
           </div>
@@ -73,22 +73,22 @@
               <thead class="bg-light">
                 <tr>
                   <th class="border-0 py-3">
-                    <i class="fas fa-image me-2 text-primary"></i>Image
+                    <i class="fas fa-image me-2 text-primary"></i>Hình ảnh
                   </th>
                   <th class="border-0 py-3">
-                    <i class="fas fa-tags me-2 text-success"></i>Topic
+                    <i class="fas fa-tags me-2 text-success"></i>Chủ đề
                   </th>
                   <th class="border-0 py-3">
-                    <i class="fas fa-heading me-2 text-info"></i>Title
+                    <i class="fas fa-heading me-2 text-info"></i>Tiêu đề
                   </th>
                   <th class="border-0 py-3">
-                    <i class="fas fa-align-left me-2 text-warning"></i>Description
+                    <i class="fas fa-align-left me-2 text-warning"></i>Mô tả
                   </th>
                   <th class="text-center border-0 py-3">
-                    <i class="fas fa-toggle-on me-2 text-secondary"></i>Status
+                    <i class="fas fa-toggle-on me-2 text-secondary"></i>Trạng thái
                   </th>
                   <th class="text-center border-0 py-3">
-                    <i class="fas fa-cogs me-2 text-dark"></i>Actions
+                    <i class="fas fa-cogs me-2 text-dark"></i>Thao tác
                   </th>
                 </tr>
               </thead>
@@ -98,10 +98,17 @@
                     <td class="align-middle">
                       <div class="d-flex align-items-center">
                         <div class="post-image-container me-3">
-                          <img src="{{ asset('images/posts/'.$row->image) }}" 
-                               alt="{{ $row->title }}" 
-                               class="rounded-3 shadow-sm"
-                               style="width: 60px; height: 60px; object-fit: cover;">
+                          @if($row->image && file_exists(public_path('images/posts/' . $row->image)))
+                              <img src="{{ asset('images/posts/' . $row->image) }}" 
+                                   alt="{{ $row->title }}" 
+                                   class="rounded-3 shadow-sm"
+                                   style="width: 60px; height: 60px; object-fit: cover;">
+                          @else
+                              <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" 
+                                   style="width: 60px; height: 60px;">
+                                  <i class="fas fa-file-alt text-muted"></i>
+                              </div>
+                          @endif
                         </div>
                       </div>
                     </td>
@@ -122,11 +129,11 @@
                     <td class="text-center align-middle">
                       @if ($row->status == 1)
                         <span class="badge bg-gradient-success rounded-pill px-3 py-2">
-                          <i class="fas fa-check-circle me-1"></i>Active
+                          <i class="fas fa-check-circle me-1"></i>Hoạt động
                         </span>
                       @else
                         <span class="badge bg-gradient-secondary rounded-pill px-3 py-2">
-                          <i class="fas fa-pause-circle me-1"></i>Inactive
+                          <i class="fas fa-pause-circle me-1"></i>Tạm dừng
                         </span>
                       @endif
                     </td>
@@ -138,30 +145,25 @@
                         @if ($row->status==1)
                         <a href="{{ route('admin.post.status', $args) }}" 
                            class="btn btn-sm btn-outline-success rounded-pill me-1 hover-lift"
-                           title="Deactivate">
+                           title="Tạm dừng">
                             <i class="fas fa-toggle-on"></i>
                         </a>
                         @else
                         <a href="{{ route('admin.post.status', $args) }}" 
                            class="btn btn-sm btn-outline-secondary rounded-pill me-1 hover-lift"
-                           title="Activate">
+                           title="Kích hoạt">
                             <i class="fas fa-toggle-off"></i>
                         </a>
                         @endif
-                        <a href="{{ route('admin.post.show', $args) }}" 
-                           class="btn btn-sm btn-outline-info rounded-pill me-1 hover-lift"
-                           title="View Details">
-                            <i class="fas fa-eye"></i>
-                        </a>
                         <a href="{{ route('admin.post.edit', $args) }}" 
                            class="btn btn-sm btn-outline-primary rounded-pill me-1 hover-lift"
-                           title="Edit">
+                           title="Chỉnh sửa">
                             <i class="fas fa-edit"></i>
                         </a>
                         <a href="{{ route('admin.post.delete', $args) }}" 
                            class="btn btn-sm btn-outline-danger rounded-pill hover-lift"
-                           title="Delete"
-                           onclick="return confirm('Are you sure you want to delete this post?')">
+                           title="Xóa"
+                           onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?')">
                             <i class="fas fa-trash"></i>
                         </a>
                       </div>
