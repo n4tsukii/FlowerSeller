@@ -70,8 +70,10 @@ Route::post("dang-ky", [AuthController::class, "doSignup"])->name('website.dosig
 Route::get('trang-don/{link}', [FrontendPostController::class, 'single_page'])->name('trang-don.page');
  
 
-Route::prefix('admin')->middleware("auth")->group(function () {
+Route::prefix('admin')->middleware("admin")->group(function () {
     Route::get('/', [AdminHomeController::class, 'index'])->name('admin.dashboard.index');
+    // Backward compatibility alias
+    Route::get('/home', [AdminHomeController::class, 'index'])->name('admin.home');
     //product
     Route::prefix('product')->group(function () {
         Route::get('/', [BackendProductController::class, 'index'])->name('admin.product.index');
@@ -90,6 +92,7 @@ Route::prefix('admin')->middleware("auth")->group(function () {
     //category
     Route::prefix('category')->group(function () {
         Route::get('/', [CategoryController::class, 'index'])->name('admin.category.index');
+        Route::get('create', [CategoryController::class, 'create'])->name('admin.category.create');
         Route::get('trash', [CategoryController::class, 'trash'])->name('admin.category.trash');
         Route::get('show/{id}', [CategoryController::class, 'show'])->name('admin.category.show');
         Route::post('store', [CategoryController::class, 'store'])->name('admin.category.store');

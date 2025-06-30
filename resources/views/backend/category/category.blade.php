@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Category')
+@section('title','Categories Management')
 @section('content')
 <div class="content-wrapper">
     <!-- CONTENT -->
@@ -7,154 +7,385 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Category Page</h1>
+            <h1 class="text-gradient fw-bold">
+              <i class="fas fa-sitemap me-2"></i>Categories Management
+            </h1>
           </div>
           <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Category Page</li>
-            </ol>
+            <nav aria-label="breadcrumb" class="float-sm-right">
+              <ol class="breadcrumb bg-transparent mb-0">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}" class="text-primary">Dashboard</a></li>
+                <li class="breadcrumb-item active text-secondary">Categories</li>
+              </ol>
+            </nav>
           </div>
         </div>
       </div>
     </section>
+    
     <section class="content">
-      <div class="card">
-        <div class="card-header">
-          <div class="row">
-            <div class="col-12 text-right">
-
-                    <a href="{{ route('admin.category.trash') }}" class="btn btn-sm btn-danger ">
-                        <i class="fa fa-trash px-2" aria-hidden="true"></i>Trash bin
-                    </a>
+      <div class="row">
+        <!-- Add New Category Form -->
+        <div class="col-md-4">
+          <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-gradient-success text-white border-0 py-4">
+              <h5 class="mb-0 fw-bold">
+                <i class="fas fa-plus-circle me-2"></i>Add New Category
+              </h5>
+              <small class="opacity-75">Create a new product category</small>
+            </div>
+            <div class="card-body p-4">
+              <form action="{{ route('admin.category.store') }}" method="post" enctype="multipart/form-data" id="categoryForm">
+                @csrf
+                <div class="mb-3">
+                  <label for="name" class="form-label fw-bold">
+                    <i class="fas fa-tag me-2 text-primary"></i>Category Name
+                  </label>
+                  <input type="text" value="{{ old('name') }}" name="name" id="name" 
+                         class="form-control form-control-lg rounded-3 shadow-sm" 
+                         placeholder="Enter category name">
+                  @error('name')
+                    <div class="text-danger mt-1"><i class="fas fa-exclamation-triangle me-1"></i>{{ $message }}</div>
+                  @enderror
+                </div>
+                
+                <div class="mb-3">
+                  <label for="description" class="form-label fw-bold">
+                    <i class="fas fa-align-left me-2 text-info"></i>Description
+                  </label>
+                  <textarea name="description" id="description" rows="3" 
+                            class="form-control rounded-3 shadow-sm" 
+                            placeholder="Enter category description">{{ old('description') }}</textarea>
+                  @error('description')
+                    <div class="text-danger mt-1"><i class="fas fa-exclamation-triangle me-1"></i>{{ $message }}</div>
+                  @enderror
+                </div>
+                
+                <div class="mb-3">
+                  <label for="parent_id" class="form-label fw-bold">
+                    <i class="fas fa-sitemap me-2 text-warning"></i>Parent Category
+                  </label>
+                  <select name="parent_id" id="parent_id" class="form-select rounded-3 shadow-sm">
+                    <option value="0">Root Category</option>
+                    {!! $htmlparentid !!}
+                  </select>
+                  @error('parent_id')
+                    <div class="text-danger mt-1"><i class="fas fa-exclamation-triangle me-1"></i>{{ $message }}</div>
+                  @enderror
+                </div>
+                
+                <div class="mb-3">
+                  <label for="sort_order" class="form-label fw-bold">
+                    <i class="fas fa-sort me-2 text-secondary"></i>Sort Order
+                  </label>
+                  <select name="sort_order" id="sort_order" class="form-select rounded-3 shadow-sm">
+                    <option value="">Choose position</option>
+                    {!! $htmlsortorder !!}
+                  </select>
+                  @error('sort_order')
+                    <div class="text-danger mt-1"><i class="fas fa-exclamation-triangle me-1"></i>{{ $message }}</div>
+                  @enderror
+                </div>
+                
+                <div class="mb-3">
+                  <label for="image" class="form-label fw-bold">
+                    <i class="fas fa-image me-2 text-primary"></i>Category Image
+                  </label>
+                  <input type="file" name="image" id="image" 
+                         class="form-control rounded-3 shadow-sm" 
+                         accept="image/*">
+                  @error('image')
+                    <div class="text-danger mt-1"><i class="fas fa-exclamation-triangle me-1"></i>{{ $message }}</div>
+                  @enderror
+                </div>
+                
+                <div class="mb-4">
+                  <label for="status" class="form-label fw-bold">
+                    <i class="fas fa-toggle-on me-2 text-success"></i>Status
+                  </label>
+                  <select name="status" id="status" class="form-select rounded-3 shadow-sm">
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                  </select>
+                  @error('status')
+                    <div class="text-danger mt-1"><i class="fas fa-exclamation-triangle me-1"></i>{{ $message }}</div>
+                  @enderror
+                </div>
+                
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-gradient-success btn-lg rounded-pill shadow hover-lift">
+                    <i class="fas fa-plus me-2"></i>Add Category
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-        <div class="card-body">
-         <div class="row">
-          <div class= "col-md-3">
-          <form action="{{ route('admin.category.store') }}" method="post" enctype="multipart/form-data">
-                                @csrf
-                                <div class="mb-3">
-                                    <label for="name">Tên danh mục</label>
-                                    <input type="text" value="{{ old('name') }}" name="name" id="name" class="form-control">
-                                    @error('name')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="description">Mô tả</label>
-                                    <textarea name="description" id="description" rows="3" class="form-control">{{ old('description') }}</textarea>
-                                    @error('description')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="parent_id">Cấp cha</label>
-                                    <select name="parent_id" id="parent_id" class="form-control">
-                                        <option value="0">Cấp cha</option>
-                                        {!! $htmlparentid !!}
-                                    </select>
-                                    @error('parent_id')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="sort_order">Sắp xếp</label>
-                                    <select name="sort_order" id="sort_order" class="form-control">
-                                        <option value="">Chọn vị trí</option>
-                                        {!! $htmlsortorder !!}
-                                    </select>
-                                    @error('sort_order')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="image">Hình ảnh</label>
-                                    <input type="file" name="image" id="image" class="form-control">
-                                    @error('image')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="status">Trạng thái</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="1">Chưa xuất bản</option>
-                                        <option value="0">Xuất bản</option>
-                                    </select>
-                                    @error('status')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <button type="submit" class="btn btn-success">Thêm danh mục</button>
-                                </div>
-                            </form>
+        
+        <!-- Categories List -->
+        <div class="col-md-8">
+          <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-gradient-primary text-white border-0 py-4">
+              <div class="row align-items-center">
+                <div class="col-md-6">
+                  <h4 class="mb-0 fw-bold">
+                    <i class="fas fa-sitemap me-2"></i>All Categories
+                  </h4>
+                  <small class="opacity-75">Manage product categories</small>
+                </div>
+                <div class="col-md-6 text-end">
+                  <a href="{{ route('admin.category.trash') }}" class="btn btn-outline-light btn-sm rounded-pill shadow-sm hover-lift">
+                    <i class="fas fa-trash me-1"></i>Trash Bin
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0" id="categoriesTable"> 
+                  <thead class="bg-light">
+                    <tr>
+                      <th class="border-0 py-3">
+                        <i class="fas fa-image me-2 text-primary"></i>Image
+                      </th>
+                      <th class="border-0 py-3">
+                        <i class="fas fa-tag me-2 text-success"></i>Category
+                      </th>
+                      <th class="border-0 py-3">
+                        <i class="fas fa-sitemap me-2 text-info"></i>Parent
+                      </th>
+                      <th class="border-0 py-3">
+                        <i class="fas fa-link me-2 text-warning"></i>Slug
+                      </th>
+                      <th class="text-center border-0 py-3">
+                        <i class="fas fa-cogs me-2 text-dark"></i>Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($list as $row)
+                      <tr class="category-row border-bottom" data-status="{{ $row->status }}">
+                        <td class="align-middle">
+                          <div class="category-image-container">
+                            @if($row->image && file_exists(public_path('images/categorys/'.$row->image)))
+                              <img src="{{ asset('images/categorys/'.$row->image) }}" 
+                                   alt="{{ $row->name }}" 
+                                   class="rounded-3 shadow-sm"
+                                   style="width: 50px; height: 50px; object-fit: cover;">
+                            @else
+                              <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" 
+                                   style="width: 50px; height: 50px;">
+                                <i class="fas fa-image text-muted"></i>
+                              </div>
+                            @endif
+                          </div>
+                        </td>
+                        <td class="align-middle">
+                          <div class="category-info">
+                            <div class="fw-bold text-dark mb-1">{{ $row->name }}</div>
+                            <small class="text-muted">{{ Str::limit($row->description, 50) }}</small>
+                            <br><small class="text-muted">ID: {{ $row->id }}</small>
+                          </div>
+                        </td>
+                        <td class="align-middle">
+                          @if($row->parent_id == 0)
+                            <span class="badge bg-gradient-primary rounded-pill px-3 py-2">
+                              <i class="fas fa-crown me-1"></i>Root
+                            </span>
+                          @else
+                            <span class="badge bg-gradient-secondary rounded-pill px-3 py-2">
+                              <i class="fas fa-level-up-alt me-1"></i>ID: {{ $row->parent_id }}
+                            </span>
+                          @endif
+                        </td>
+                        <td class="align-middle">
+                          <div class="text-muted font-monospace">
+                            <i class="fas fa-link me-1"></i>{{ $row->slug }}
+                          </div>
+                        </td>
+                        <td class="text-center align-middle">
+                          @php
+                              $args = ['id' => $row->id];
+                          @endphp
+                          <div class="btn-group" role="group">
+                            @if ($row->status==1)
+                            <a href="{{ route('admin.category.status', $args) }}" 
+                               class="btn btn-sm btn-outline-success rounded-pill me-1 hover-lift"
+                               title="Deactivate">
+                                <i class="fas fa-toggle-on"></i>
+                            </a>
+                            @else
+                            <a href="{{ route('admin.category.status', $args) }}" 
+                               class="btn btn-sm btn-outline-secondary rounded-pill me-1 hover-lift"
+                               title="Activate">
+                                <i class="fas fa-toggle-off"></i>
+                            </a>
+                            @endif
+                            <a href="{{ route('admin.category.show', $args) }}" 
+                               class="btn btn-sm btn-outline-info rounded-pill me-1 hover-lift"
+                               title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ route('admin.category.edit', $args) }}" 
+                               class="btn btn-sm btn-outline-primary rounded-pill me-1 hover-lift"
+                               title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{{ route('admin.category.delete', $args) }}" 
+                               class="btn btn-sm btn-outline-danger rounded-pill hover-lift"
+                               title="Delete"
+                               onclick="return confirm('Are you sure you want to delete this category?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-          <div class="col-md-9">
-          <table class="table table-bordered table-hover table-striped"> 
-            <thead>
-            <tr>
-                <th class="text-center">#</th>
-                <th class="text-center">Image</th>
-                <th class="text-center">Category Name</th>
-                <th class="text-center">Parent Category</th>
-                <th class="text-center">Slug</th>
-                <th class="text-center">Description</th>
-                <th class="text-center">Action</th>
-                <th class="text-center">ID</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            @foreach ($list as $row)
-            <tr class="datarow">
-                <td>
-                    <input type="checkbox">
-                </td>
-                <td>
-                <img style="width: 150px; height: 150px;" src="{{ asset('images/categorys/'.$row->image) }}" alt="{{ $row->image }}">
-                </td>
-                <td>
-                    <div class="name">
-                        {{ $row->name }}
-                    </div>
-                </td>
-                <td>{{$row->parent_id}}</td>
-                <td>{{ $row->slug }}</td>
-                <td>{{ $row->description }}</td>
-                <td>
-    @php
-        $args = ['id' => $row->id];
-    @endphp
-    @if ($row->status==1)
-    <a href="{{ route('admin.category.status', $args) }}" class="btn btn-sm btn-success">
-        <i class="fa fa-toggle-on" aria-hidden="true"></i>
-    </a>
-    @else
-    <a href="{{ route('admin.category.status', $args) }}" class="btn btn-sm btn-danger">
-        <i class="fa fa-toggle-off" aria-hidden="true"></i>
-    </a>
-    @endif
-    <a href="{{ route('admin.category.show', $args) }}" class="btn btn-sm btn-info">
-        <i class="fa fa-eye" aria-hidden="true"></i>
-    </a>
-    <a href="{{ route('admin.category.edit', $args) }}" class="btn btn-sm btn-primary">
-        <i class="fa fa-edit" aria-hidden="true"></i>
-    </a>
-    <a href="{{ route('admin.category.delete', $args) }}" class="btn btn-sm btn-danger">
-        <i class="fa fa-trash" aria-hidden="true"></i>
-    </a>
-</td>
-                <td>{{ $row->id }}</td>
-            </tr>
-        @endforeach
-            </tbody>
-          </table>
-          </div>
-         </div>
         </div>
       </div>
     </section>
-    <!-- /.CONTENT -->
-  </div>@endsection
+</div>
+
+<!-- Enhanced JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    const form = document.getElementById('categoryForm');
+    const nameInput = document.getElementById('name');
+    
+    form.addEventListener('submit', function(e) {
+        if (nameInput.value.trim() === '') {
+            e.preventDefault();
+            nameInput.classList.add('is-invalid');
+            nameInput.focus();
+            return false;
+        }
+    });
+    
+    nameInput.addEventListener('input', function() {
+        this.classList.remove('is-invalid');
+    });
+    
+    // Image preview
+    const imageInput = document.getElementById('image');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Create preview if doesn't exist
+                    let preview = document.getElementById('imagePreview');
+                    if (!preview) {
+                        preview = document.createElement('img');
+                        preview.id = 'imagePreview';
+                        preview.className = 'mt-2 rounded-3 shadow-sm';
+                        preview.style.width = '100px';
+                        preview.style.height = '100px';
+                        preview.style.objectFit = 'cover';
+                        imageInput.parentNode.appendChild(preview);
+                    }
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    // Table row hover effects
+    const rows = document.querySelectorAll('.category-row');
+    rows.forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(5px)';
+            this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+            this.style.boxShadow = 'none';
+        });
+    });
+});
+</script>
+
+<style>
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.category-row {
+    transition: all 0.3s ease;
+}
+
+.text-gradient {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(45deg, #56ab2f 0%, #a8e6cf 100%);
+}
+
+.bg-gradient-secondary {
+    background: linear-gradient(45deg, #bdc3c7 0%, #2c3e50 100%);
+}
+
+.btn-gradient-success {
+    background: linear-gradient(45deg, #56ab2f 0%, #a8e6cf 100%);
+    border: none;
+    color: white;
+}
+
+.btn-gradient-success:hover {
+    background: linear-gradient(45deg, #4a9d26 0%, #95d9bb 100%);
+    color: white;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.05);
+}
+
+.btn-group .btn {
+    margin-right: 0.25rem;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.is-invalid {
+    border-color: #dc3545;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+</style>
+
+@endsection

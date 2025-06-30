@@ -9,7 +9,6 @@
         <table class="table align-middle table-hover shadow-sm rounded" style="background: #fff;">
             <thead class="table-light">
                 <tr>
-                    <th>ID</th>
                     <th style="width:90px">Hình</th>
                     <th>Tên sản phẩm</th>
                     <th style="width:110px;">Số lượng</th>
@@ -24,14 +23,13 @@
                 @endphp
                 @if(count($list_cart) == 0)
                 <tr>
-                    <td colspan="7" class="text-center text-muted py-5" style="font-size: 1.2rem;">
+                    <td colspan="6" class="text-center text-muted py-5" style="font-size: 1.2rem;">
                         Giỏ hàng của bạn đang rỗng.
                     </td>
                 </tr>
                 @else
                 @foreach($list_cart as $row_cart)
                 <tr>
-                    <td class="fw-bold">{{ $row_cart['id'] }}</td>
                     <td>
                         <img class="img-thumbnail" style="width:70px;height:70px;object-fit:cover;border-radius:8px;" src="{{ asset('images/products/' . $row_cart['image']) }}" alt="{{ $row_cart['image'] }}">
                     </td>

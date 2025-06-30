@@ -36,7 +36,7 @@
                     <label for="name">
                         <strong>Tên</strong>
                     </label>
-                    <input type="text" id="name" name="name" class="form-control" placeholder="Nhập tên" value="{{ old('name') }}" required>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Nhập tên" value="{{ old('name') }}" required autofocus>
                     @error('name') <span class="text-danger small">{{ $message }}</span> @enderror
                 </div>
                 <div class="mb-3">
@@ -94,6 +94,26 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYwqLDIrZUI/4hqeoQieQmAZNXBecioYjo2IdadnWP+8ZaIJVT5EE2iyIGjE5UfqkhI9+M2T8gn3x+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-50i+FSndj70KMY7JcPNT6y76oPBKUYO9e3RVT5ic2qP3RnlhpU5z7PJX9eTQ/L7O/nq25C6nPUWgoX76OMRYyQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Auto focus to name input -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Focus vào ô tên khi trang load xong
+            const nameInput = document.getElementById('name');
+            if (nameInput) {
+                nameInput.focus();
+                
+                // Đặt con trỏ ở cuối nếu có text
+                nameInput.setSelectionRange(nameInput.value.length, nameInput.value.length);
+            }
+        });
+
+        // Backup focus bằng jQuery
+        $(document).ready(function() {
+            $('#name').focus();
+        });
+    </script>
+    
     @if (Session::has('message'))
     <script>
         toastr.options = {

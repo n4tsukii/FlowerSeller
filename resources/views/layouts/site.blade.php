@@ -4,6 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
     <link href="img/favicon.ico" rel="icon" />
     
@@ -20,9 +21,42 @@
     <!-- Custom CSS -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="{{ asset('vendor/flasher/toastr.min.js') }}"></script>
-    <script src="{{ asset('vendor/flasher/flasher-toastr.min.js') }}"></script>
+    
+    <style>
+        /* Điều chỉnh khoảng cách giữa các section - GIẢM TỐI ĐA */
+        main .container-fluid, footer .container-fluid {
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+        }
+        
+        /* Navbar container padding = 0 */
+        .navbar, .navbar .container, .navbar .container-fluid {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        
+        .section-spacing {
+            margin-bottom: 10px;
+        }
+        
+        /* Giảm padding cho các card và component */
+        .card {
+            margin-bottom: 10px;
+        }
+        
+        /* Điều chỉnh spacing cho main content - GIẢM TỐI ĐA */
+        main .container, main .container-fluid {
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        
+        /* Giảm margin cho footer */
+        footer {
+            margin-top: 10px !important;
+        }
+    </style>
 
   </head>
   <body>
@@ -50,16 +84,10 @@
                   type="text"
                   name="search_query"
                   placeholder="Tìm kiếm sản phẩm..."
-                  class="form-control py-2 px-3 rounded-start"
-                  style="border: 1px solid #a18cd1; border-right: none; height: 40px;"
+                  class="form-control py-2 px-3 rounded"
+                  style="border: 1px solid #a18cd1; height: 40px;"
                   value="{{ request('search_query') }}"
               />
-              <button
-                  type="submit"
-                  class="btn d-flex align-items-center justify-content-center"
-                  style="background: #a18cd1; border-radius: 0 6px 6px 0; border: 1px solid #a18cd1; border-left: none; height: 40px; width: 48px; min-width: 48px;"
-              >
-              </button>
           </form>
         </div>
         <div class="nav-item d-flex align-items-center">
@@ -86,7 +114,11 @@
 
             <a class="btn btn-outline-primary" style="border-color: #a18cd1; color: #a18cd1;" href="{{route('site.cart.index')}}">
                 @php
-                    $count = count(session('carts',[]))
+                    if (Auth::check()) {
+                        $count = App\Models\Cart::where('user_id', Auth::id())->sum('quantity');
+                    } else {
+                        $count = 0; // No cart for unauthenticated users
+                    }
                 @endphp
                 <i class="bi bi-cart"></i> Giỏ hàng (<span id="showqty">{{$count}}</span>)
             </a>
@@ -96,13 +128,13 @@
         <x-main-menu/>
       </div>
     </header>
-    <main style="background: #f8f9fa;">
+    <main style="background: #f8f9fa; padding-top: 5px;">
         @yield('content')
     </main>
-    <footer>
-    <div class="container-fluid bg-dark text-light py-5" style="background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);">
+    <footer style="margin-top: 5px;">
+    <div class="container-fluid bg-dark text-light py-4" style="background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);">
         <div class="container">
-            <div class="row g-5">
+            <div class="row g-4">
                 <div class="col-lg-3 col-md-6">
                     <h3 class="text-white mb-4">Liên hệ</h3>
                     <p><i class="bi bi-geo-alt"></i> PKA College</p>
@@ -121,18 +153,6 @@
                 <div class="col-lg-3 col-md-6">
                     <h3 class="text-white mb-4">Chính sách</h3>                  
                     <x-footer-menu />
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid bg-primary text-light py-4" style="background: #a18cd1;">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-md-0">&copy; <a href="#" style="color: #fff;">ShopHoa</a>. All Rights Reserved.</p>
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <p class="mb-0">Designed by <a href="https://htmlcodex.com" style="color: #fff;">HTML Codex</a></p>
                 </div>
             </div>
         </div>
@@ -161,14 +181,124 @@
     </script>
     <!-- Include jQuery from a CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Toastr JS (must be after jQuery) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="{{ asset('vendor/flasher/flasher-toastr.min.js') }}"></script>
+    
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    
+    <!-- Global Cart Functions -->
+    <script>
+        // Setup CSRF token for AJAX requests
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        
+        function quickAddToCart(productid) {
+            console.log('quickAddToCart called with productid:', productid); // Debug log
+            
+            // Find the button element properly
+            let button = event.target;
+            
+            // If user clicked on the icon inside the button, get the parent button
+            if (!button.classList.contains('add-to-cart-btn')) {
+                button = button.closest('.add-to-cart-btn');
+            }
+            
+            if (!button) {
+                console.error('Button not found');
+                return;
+            }
+            
+            console.log('Button found:', button.className); // Debug log
+            
+            const originalHTML = button.innerHTML;
+            
+            console.log('Adding product to cart:', productid); // Debug log
+            
+            // Show loading state
+            button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang thêm...';
+            button.disabled = true;
+            
+            $.ajax({
+                url: '{{ route('site.cart.addcart') }}',
+                type: "GET",
+                data: {
+                    productid: productid,
+                    qty: 1  // Default quantity for quick add
+                },
+                timeout: 10000, // 10 second timeout
+                cache: false, // Prevent caching
+                success: function(response) {
+                    console.log('Cart response:', response); // Debug log
+                    
+                    try {
+                        if (response.success) {
+                            // Update cart count displays
+                            $('#showqty').text(response.cart_count);
+                            $('.cart-count').text(response.cart_count);
+                            
+                            // Show success notification
+                            if (response.toastr_type === 'success') {
+                                toastr.success(response.message && !/add(ed)? to cart|successfully|thành công/i.test(response.message) ? response.message : 'Thêm vào giỏ hàng thành công!');
+                            } else if (response.toastr_type === 'warning') {
+                                toastr.warning(response.message && !/warning|cảnh báo/i.test(response.message) ? response.message : 'Có cảnh báo khi thêm vào giỏ hàng!');
+                            } else {
+                                toastr.error(response.message && !/error|failed|lỗi/i.test(response.message) ? response.message : 'Có lỗi xảy ra khi thêm vào giỏ hàng.');
+                            }
+                        } else {
+                            // Handle different message types
+                            if (response.toastr_type === 'warning') {
+                                toastr.warning(response.message);
+                            } else {
+                                toastr.error(response.message || 'Có lỗi xảy ra khi thêm vào giỏ hàng.');
+                            }
+                            
+                            // Handle redirect (e.g., to login page)
+                            if (response.redirect) {
+                                setTimeout(function() {
+                                    window.location.href = response.redirect;
+                                }, 1500);
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Error processing response:', e);
+                        toastr.error('Có lỗi xảy ra khi xử lý phản hồi.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Cart AJAX Error:', {xhr, status, error}); // Debug log
+                    console.error('Response Text:', xhr.responseText); // Debug log
+                    
+                    if (status === 'timeout') {
+                        toastr.error('Hết thời gian chờ, vui lòng thử lại.');
+                    } else if (status === 'abort') {
+                        toastr.error('Yêu cầu bị hủy.');
+                    } else {
+                        toastr.error('Có lỗi xảy ra khi thêm vào giỏ hàng: ' + error);
+                    }
+                },
+                complete: function() {
+                    console.log('AJAX request completed'); // Debug log
+                    // Restore button state (always execute this)
+                    try {
+                        button.innerHTML = originalHTML;
+                        button.disabled = false;
+                    } catch (e) {
+                        console.error('Error restoring button state:', e);
+                        // Fallback restoration
+                        button.innerHTML = '<i class="fa fa-shopping-cart me-1"></i> Thêm vào giỏ';
+                        button.disabled = false;
+                    }
+                }
+            });
+        }
+    </script>
+    
     @yield('footer')
   </body>
-</html>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    @yield('footer')
-  </body>
-</html>
 </html>

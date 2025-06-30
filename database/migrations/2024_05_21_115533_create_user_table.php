@@ -25,7 +25,7 @@ return new class extends Migration
             $table->unsignedInteger('created_by');
             $table->dateTime('updated_at')->nullable()->useCurrentOnUpdate();
             $table->unsignedInteger('updated_by')->nullable();
-            $table->unsignedTinyInteger('status')->default(2);
+            $table->unsignedTinyInteger('status')->default(1); // Changed from 2 to 1 (active by default)
         });
     }
 

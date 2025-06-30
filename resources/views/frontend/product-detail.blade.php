@@ -72,22 +72,52 @@
 @section('footer')
     <script>
         function handleAddCart(productid) {
-        let qty = document.getElementById("qty").value;
-        $.ajax({
-            url: '{{ route('site.cart.addcart') }}',
-            type: "GET",
-            data: {
-                productid: productid,
-                qty: qty
-            },
-            success: function(result, status, xhr) {
-                document.getElementById("showqty").innerHTML = result;
-                alert("Thêm vào giỏ hàng thành công");
+            let qty = document.getElementById("qty").value;
+            
+            // Show loading state
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Adding...';
+            button.disabled = true;
+            
+            $.ajax({
+                url: '{{ route('site.cart.addcart') }}',
+                type: "GET",
+                data: {
+                    productid: productid,
+                    qty: qty
                 },
-            error: function(xhr, status, error) {
-                alert(error);
-            }
-        });
-    }
+                success: function(response, status, xhr) {
+                    if (response.success) {
+                        // Update cart count display if it exists
+                        if (document.getElementById("showqty")) {
+                            document.getElementById("showqty").innerHTML = response.cart_count;
+                        }
+                        
+                        // Show toastr notification
+                        if (response.toastr_type === 'success') {
+                            toastr.success(response.message);
+                        } else if (response.toastr_type === 'info') {
+                            toastr.info(response.message);
+                        }
+                    } else {
+                        if (response.toastr_type === 'error') {
+                            toastr.error(response.message);
+                        } else {
+                            toastr.error(response.message || 'Failed to add to cart');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Cart error:', error);
+                    toastr.error('An error occurred while adding to cart');
+                },
+                complete: function() {
+                    // Restore button state
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            });
+        }
     </script>
 @endsection

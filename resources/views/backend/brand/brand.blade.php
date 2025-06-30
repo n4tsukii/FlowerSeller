@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 @section('title','Brand')
 @section('content')
-<div class="content-wrapper">
+<div class=            <tr>
+                <th class="text-center">Hình ảnh</th>
+                <th class="text-center">Tên thương hiệu</th>
+                <th class="text-center">Mô tả</th>
+                <th class="text-center">Trạng thái</th>
+                <th class="text-center">Thao tác</th>
+            </tr>apper">
     <!-- CONTENT -->
     <section class="content-header">
       <div class="container-fluid">
@@ -96,37 +102,49 @@
 
             </tr>
             </thead>
-            <tbody>
-            @foreach ($list as $row)
+            <tbody>            @foreach ($list as $row)
                 <tr>
-                <td><input type="checkbox" name="brand_checkbox" value="1">  </td>                  <td><img style="width: 150px; height: 150px;" src="{{ asset('images/brands/'.$row->image) }}" alt="{{ $row->image }}">
-                    <td>{{$row->name}}</td>
-                     <td>{{$row->description}}</td>
-                     <td>
-    @php
-        $args = ['id' => $row->id];
-    @endphp
-    @if ($row->status==1)
-    <a href="{{ route('admin.brand.status', $args) }}" class="btn btn-sm btn-success">
-        <i class="fa fa-toggle-on" aria-hidden="true"></i>
-    </a>
-    @else
-    <a href="{{ route('admin.brand.status', $args) }}" class="btn btn-sm btn-danger">
-        <i class="fa fa-toggle-off" aria-hidden="true"></i>
-    </a>
-    @endif
-    <a href="{{ route('admin.brand.show', $args) }}" class="btn btn-sm btn-info">
-        <i class="fa fa-eye" aria-hidden="true"></i>
-    </a>
-    <a href="{{ route('admin.brand.edit', $args) }}" class="btn btn-sm btn-primary">
-        <i class="fa fa-edit" aria-hidden="true"></i>
-    </a>
-    <a href="{{ route('admin.brand.delete', $args) }}" class="btn btn-sm btn-danger">
-        <i class="fa fa-trash" aria-hidden="true"></i>
-    </a>
-  </td>
-                <td>{{$row->id}}</td>
-                <td>{{$row->status}}</td>
+                    <td class="text-center">
+                        <img class="rounded" style="width: 60px; height: 60px; object-fit: cover;" 
+                             src="{{ asset('images/brands/'.$row->image) }}" 
+                             alt="{{ $row->name }}">
+                    </td>
+                    <td class="fw-bold">{{$row->name}}</td>
+                    <td>{{$row->description}}</td>
+                    <td class="text-center">
+                        @php $args = ['id' => $row->id]; @endphp
+                        @if ($row->status==1)
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Hoạt động
+                            </span>
+                        @else
+                            <span class="badge bg-warning">
+                                <i class="fas fa-pause me-1"></i>Tạm dừng
+                            </span>
+                        @endif
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            @if ($row->status==1)
+                                <a href="{{ route('admin.brand.status', $args) }}" class="btn btn-sm btn-outline-warning" title="Tạm dừng">
+                                    <i class="fas fa-pause"></i>
+                                </a>
+                            @else
+                                <a href="{{ route('admin.brand.status', $args) }}" class="btn btn-sm btn-outline-success" title="Kích hoạt">
+                                    <i class="fas fa-play"></i>
+                                </a>
+                            @endif
+                            <a href="{{ route('admin.brand.show', $args) }}" class="btn btn-sm btn-outline-info" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ route('admin.brand.edit', $args) }}" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{{ route('admin.brand.delete', $args) }}" class="btn btn-sm btn-outline-danger" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
                 </tr>
               @endforeach
             </tbody>

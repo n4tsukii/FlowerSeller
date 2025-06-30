@@ -34,54 +34,60 @@
           <table class="table table-bordered table-hover table-striped"> 
             <thead>
             <tr>
-                <th class="text-center">#</th>
-                <th class="text-center">Name</th>
+                <th class="text-center">Tên khách hàng</th>
                 <th class="text-center">Email</th>
-                <th class="text-center">Phone</th>
-                <th class="text-center">Title</th>
-                <th class="text-center">Content</th>
-                <th class="text-center">Replay ID</th>
-                <th class="text-center">Action</th>
-                <th class="text-center">ID</th>
-                <th class="text-center">Status</th>
-
+                <th class="text-center">Điện thoại</th>
+                <th class="text-center">Tiêu đề</th>
+                <th class="text-center">Nội dung</th>
+                <th class="text-center">Trạng thái</th>
+                <th class="text-center">Thao tác</th>
             </tr>
             </thead>
-            <tbody>
-              @foreach ($list as $row)
+            <tbody>              @foreach ($list as $row)
                 <tr>
-                    <td><input type="checkbox" name="contact_checkbox" value="1"></td>
-                    <td>{{$row->name}}</td>
+                    <td class="fw-bold">{{$row->name}}</td>
                     <td>{{$row->email}}</td>
                     <td>{{$row->phone}}</td>
-                    <td>{{$row->title}} </td>
-                    <td>{{$row->content}}</td>
-                    <td>{{$row->replay_id}}</td>
+                    <td>{{$row->title}}</td>
                     <td>
-    @php
-        $args = ['id' => $row->id];
-    @endphp
-    @if ($row->status==1)
-    <a href="{{ route('admin.contact.status', $args) }}" class="btn btn-sm btn-success">
-        <i class="fa fa-toggle-on" aria-hidden="true"></i>
-    </a>
-    @else
-    <a href="{{ route('admin.contact.status', $args) }}" class="btn btn-sm btn-danger">
-        <i class="fa fa-toggle-off" aria-hidden="true"></i>
-    </a>
-    @endif
-    <a href="{{ route('admin.contact.show', $args) }}" class="btn btn-sm btn-info">
-        <i class="fa fa-eye" aria-hidden="true"></i>
-    </a>
-    <a href="{{ route('admin.contact.edit', $args) }}" class="btn btn-sm btn-primary">
-        <i class="fa fa-edit" aria-hidden="true"></i>
-    </a>
-    <a href="{{ route('admin.contact.delete', $args) }}" class="btn btn-sm btn-danger">
-        <i class="fa fa-trash" aria-hidden="true"></i>
-    </a>
-</td>
-                <td>{{$row->id}}</td>
-                <td>{{$row->status}}</td>
+                        <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
+                            {{Str::limit($row->content, 50)}}
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        @php $args = ['id' => $row->id]; @endphp
+                        @if ($row->status==1)
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Đã xử lý
+                            </span>
+                        @else
+                            <span class="badge bg-warning">
+                                <i class="fas fa-clock me-1"></i>Chờ xử lý
+                            </span>
+                        @endif
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            @if ($row->status==1)
+                                <a href="{{ route('admin.contact.status', $args) }}" class="btn btn-sm btn-outline-warning" title="Đánh dấu chưa xử lý">
+                                    <i class="fas fa-undo"></i>
+                                </a>
+                            @else
+                                <a href="{{ route('admin.contact.status', $args) }}" class="btn btn-sm btn-outline-success" title="Đánh dấu đã xử lý">
+                                    <i class="fas fa-check"></i>
+                                </a>
+                            @endif
+                            <a href="{{ route('admin.contact.show', $args) }}" class="btn btn-sm btn-outline-info" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ route('admin.contact.edit', $args) }}" class="btn btn-sm btn-outline-primary" title="Trả lời">
+                                <i class="fas fa-reply"></i>
+                            </a>
+                            <a href="{{ route('admin.contact.delete', $args) }}" class="btn btn-sm btn-outline-danger" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
                 </tr>
               @endforeach
             </tbody>

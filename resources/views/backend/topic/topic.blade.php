@@ -83,48 +83,53 @@
                         <table class="table table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                    <th class="text-center">#</th>
-                                    <th class="text-center">Topic name</th>
-                                    <th class="text-center">Description</th>
-                                    <th class="text-center">Action</th>
-                                    <th class="text-center">ID</th>
-                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Tên chủ đề</th>
+                                    <th class="text-center">Mô tả</th>
+                                    <th class="text-center">Trạng thái</th>
+                                    <th class="text-center">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($list as $row)
                                 <tr>
-                                    <td><input type="checkbox" name="topic_checkbox" value="1"></td>
                                     <td>{{$row->name}}</td>
                                     <td>{{$row->description}}</td>
-                                    <td>
+                                    <td class="text-center">
+                                        @if ($row->status==1)
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check me-1"></i>Hoạt động
+                                            </span>
+                                        @else
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-pause me-1"></i>Tạm dừng
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
                                         @php
                                         $args = ['id' => $row->id];
                                         @endphp
-                                        @if ($row->status==1)
-                                        <a href="{{ route('admin.topic.status', $args) }}" class="btn btn-sm btn-success">
-                                            <i class="fa fa-toggle-on" aria-hidden="true"></i>
-                                        </a>
-                                        @else
-                                        <a href="{{ route('admin.topic.status', $args) }}" class="btn btn-sm btn-danger">
-                                            <i class="fa fa-toggle-off" aria-hidden="true"></i>
-                                        </a>
-                                        @endif
-                                        <a href="{{ route('admin.topic.show', $args) }}"
-                                            class="btn btn-sm btn-info">
-                                            <i class="fa fa-eye" aria-hidden="true"></i>
-                                        </a>
-                                        <a href="{{ route('admin.topic.edit', $args) }}"
-                                            class="btn btn-sm btn-primary">
-                                            <i class="fa fa-edit" aria-hidden="true"></i>
-                                        </a>
-                                        <a href="{{ route('admin.topic.delete', $args) }}"
-                                            class="btn btn-sm btn-danger">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </a>
+                                        <div class="btn-group" role="group">
+                                            @if ($row->status==1)
+                                                <a href="{{ route('admin.topic.status', $args) }}" class="btn btn-sm btn-outline-warning" title="Tạm dừng">
+                                                    <i class="fas fa-pause"></i>
+                                                </a>
+                                            @else
+                                                <a href="{{ route('admin.topic.status', $args) }}" class="btn btn-sm btn-outline-success" title="Kích hoạt">
+                                                    <i class="fas fa-play"></i>
+                                                </a>
+                                            @endif
+                                            <a href="{{ route('admin.topic.show', $args) }}" class="btn btn-sm btn-outline-info" title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('admin.topic.edit', $args) }}" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{{ route('admin.topic.delete', $args) }}" class="btn btn-sm btn-outline-danger" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
                                     </td>
-                                    <td>{{$row->id}}</td>
-                                    <td>{{$row->status}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

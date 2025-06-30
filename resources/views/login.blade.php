@@ -36,7 +36,7 @@
                     <label for="username">
                         <strong>Tên đăng nhập</strong>
                     </label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Tên đăng nhập hoặc email">
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Tên đăng nhập hoặc email" autofocus>
                 </div>
                 <div class="mb-3">
                     <label for="password">
@@ -51,6 +51,26 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYwqLDIrZUI/4hqeoQieQmAZNXBecioYjo2IdadnWP+8ZaIJVT5EE2iyIGjE5UfqkhI9+M2T8gn3x+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-50i+FSndj70KMY7JcPNT6y76oPBKUYO9e3RVT5ic2qP3RnlhpU5z7PJX9eTQ/L7O/nq25C6nPUWgoX76OMRYyQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Auto focus to username input -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Focus vào ô username khi trang load xong
+            const usernameInput = document.getElementById('username');
+            if (usernameInput) {
+                usernameInput.focus();
+                
+                // Đặt con trỏ ở cuối nếu có text
+                usernameInput.setSelectionRange(usernameInput.value.length, usernameInput.value.length);
+            }
+        });
+
+        // Backup focus bằng jQuery (nếu DOM chưa ready)
+        $(document).ready(function() {
+            $('#username').focus();
+        });
+    </script>
+    
     @if (Session::has('message'))
     <script>
         toastr.options = {

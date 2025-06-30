@@ -1,139 +1,109 @@
 @extends('layouts.site')
-@section('title', 'Giỏ hàng')
+@section('title', 'Thanh toán')
 @section('content')
-    <div class="container mt-2">
-        <b class="text-center ">
-            <h2>Thanh toán</h2>
-        </b>
-        <div class="row">
-
-            <div class="col-md-12">
-
-                <div class="row mt-5 mb-3">
-                    <div class="col-12 d-flex justify-content-end">
-                        <a href="#" class="btn btn-sm btn-danger mx-1">
-                            <i class="fas fa-trash"></i> Hủy giỏ hàng
-                        </a>
-                        <a class="btn btn-sm btn-info mx-1" href="{{ route('site.home') }}">
-                            <i class="fa fa-arrow-left"></i> Về trang chủ
-                        </a>
-                    </div>
-                </div>
-                <table class="table table-bordered table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th class="text-center" style="width:30px;">#</th>
-                            <th class="text-center">ID</th>
-                            <th class="text-center">Hình ảnh</th>
-                            <th class="text-center">Tên sản phẩm</th>
-                            <th class="text-center">Giá</th>
-                            <th class="text-center">Số lượng</th>
-                            <th class="text-center">Thành tiền</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $totalMoney = 0;
+<div class="container py-4">
+    <h2 class="mb-4 text-center" style="color:#a18cd1;font-weight:700;">THANH TOÁN</h2>
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-10">
+            <div class="order-summary-card card shadow-sm p-4 mb-4 border-0 w-100">
+                <h4 class="mb-3" style="color:#764ba2;font-weight:700;"><i class="bi bi-receipt"></i> Đơn hàng của bạn</h4>
+                @php 
+                    $totalMoney = 0; 
+                    $totalQty = 0;
+                @endphp
+                <div class="order-products-list mb-3">
+                    @if (is_array($cart_list) && count($cart_list) > 0)
+                        @foreach ($cart_list as $item)
+                        <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
+                            <img src="{{ asset('images/products/' . $item['image']) }}" alt="{{ $item['name'] }}" style="width:70px;height:70px;object-fit:cover;border-radius:12px;box-shadow:0 2px 8px #a18cd133;">
+                            <div class="ms-3 flex-grow-1">
+                                <div class="fw-bold">{{ $item['name'] }}</div>
+                                <div class="text-muted small">x{{ $item['qty'] }}</div>
+                            </div>
+                            <div class="fw-semibold" style="color:#a18cd1;min-width:100px;text-align:right;">{{ number_format($item['price'] * $item['qty']) }}₫</div>
+                        </div>
+                        @php 
+                            $totalMoney += $item['price'] * $item['qty'];
+                            $totalQty += $item['qty'];
                         @endphp
-                        @if (is_array($cart_list) && count($cart_list) > 0)
-                            @foreach ($cart_list as $item)
-                                <tr class="text-center">
-                                    <td class="text-center">
-                                        <input type="checkbox" id="checkId" value="1" name="checkId[]">
-                                    </td>
-                                    <td>{{ $item['id'] }}</td>
-                                    <td><img src="{{ asset('images/products/' . $item['image']) }}" style="width: 200px;"
-                                            alt="{{ $item['name'] }}" /></td>
-                                    <td>{{ $item['name'] }}</td>
-                                    <td>{{ $item['price'] }}</td>
-                                    <td>
-
-                                        {{ $item['qty'] }}
-                                    </td>
-                                    <td>{{ $item['price'] * $item['qty'] }}</td>
-
-                                </tr>
-                                @php
-                                    $totalMoney += $item['price'] * $item['qty'];
-                                @endphp
-                            @endforeach
-
-                        @endif
-
-                    </tbody>
-
-                    <tfoot>
-
-                        <tr>
-                            <th colspan="6"class="text-end">
-                                <strong>Tổng tiền:</strong>
-                            </th>
-                            <th colspan="2" class="text-start">
-                                <strong> {{ $totalMoney }}</strong>
-                            </th>
-                        </tr>
-                    </tfoot>
-                </table>
-
-
+                        @endforeach
+                    @else
+                        <div class="text-center text-muted py-4">Giỏ hàng của bạn đang rỗng.</div>
+                    @endif
+                </div>
+                <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                    <span class="fw-bold fs-5">Tổng tiền:</span>
+                    <span class="fw-bold fs-3" style="color:#764ba2;">{{ number_format($totalMoney) }}₫</span>
+                </div>
             </div>
-            <div class="col-md-3"></div>
+            <div class="mb-4 p-4 bg-white shadow-sm rounded-3 border w-100">
+                <h4 class="mb-3" style="color:#764ba2;font-weight:700;"><i class="bi bi-person-circle"></i> Thông tin khách hàng</h4>
+                @if (!Auth::check())
+                    <div class="alert alert-warning mb-0">Hãy đăng nhập để thanh toán</div>
+                    <a href="{{ route('website.getlogin') }}" class="btn btn-primary mt-3">Đăng nhập</a>
+                @else
+                <form action="{{ route('site.cart.docheckout') }}" method="post">
+                    @csrf
+                    @php $user = Auth::user(); @endphp
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Họ tên</label>
+                            <input type="text" name="name" value="{{ $user->name }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" value="{{ $user->email }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Điện thoại</label>
+                            <input type="text" name="phone" value="{{ $user->phone }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Địa chỉ</label>
+                            <input type="text" name="address" value="{{ $user->address }}" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Ghi chú</label>
+                            <textarea name="note" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Phương thức thanh toán</label>
+                            <select name="payment_method" class="form-select">
+                                <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                                <option value="bank">Chuyển khoản ngân hàng</option>
+                            </select>
+                        </div>
+                        <div class="col-12 text-end mt-3">
+                            <button class="btn btn-success px-4 py-2 fs-5" type="submit">Đặt mua</button>
+                        </div>
+                    </div>
+                </form>
+                @endif
+            </div>
         </div>
-        @if (!Auth::check())
-            <div class="row">
-                <div class="col-12">
-                    <h3>Hãy đăng nhập để thanh toán</h3>
-                    <a href="{{ route('website.getlogin') }}">Đăng nhập</a>
-                </div>
-            </div>
-        @else
-            <form action="{{ route('site.cart.docheckout') }}" method="post">
-                @csrf
-                <div class="row my-5">
-                    @php
-                        $user = Auth::user();
-                    @endphp
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label>Họ tên</label>
-                            <input type="text" name ="name" value="{{ $user->name }}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label>Email</label>
-                            <input type="text" name ="email" value="{{ $user->email }}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label>Điện thoại</label>
-                            <input type="text" name ="phone" value="{{ $user->phone }}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label>Địa chỉ</label>
-                            <input type="text" name ="address" value="{{ $user->address }}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label>Chú ý</label>
-                            <textarea name="note" class="form-control"></textarea>
-
-                        </div>
-
-                    </div>
-                    <div class="col-md-12 text-end">
-                        <button class="btn btn-success"type="submit">Đặt mua</button>
-
-
-                    </div>
-                </div>
-            </form>
-        @endif
     </div>
-
+</div>
+<style>
+.order-summary-card {
+    border-radius: 18px;
+    background: linear-gradient(135deg, #f8f9fa 80%, #e9ecef 100%);
+    box-shadow: 0 4px 24px #a18cd133;
+    min-width: 320px;
+    max-width: 100%;
+}
+.order-products-list {
+    max-height: 350px;
+    overflow-y: auto;
+}
+@media (max-width: 991.98px) {
+    .order-summary-card { margin-top: 30px; }
+    .col-xl-8.col-lg-10 { max-width: 100% !important; }
+}
+@media (max-width: 576px) {
+    .order-summary-card, .mb-4.p-4.bg-white.shadow-sm.rounded-3.border {
+        padding: 10px !important;
+    }
+    .order-products-list img { width: 48px !important; height: 48px !important; }
+}
+</style>
 @endsection

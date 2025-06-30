@@ -13,15 +13,71 @@ use App\Models\Product;
 class ProductController extends Controller
 {
     
-    public function index()
+    public function index(Request $request)
     {
-        $list = Product::where('product.status','!=',0)
-        ->join('category','category.id','=','product.category_id')
-        ->join('brand','brand.id','=','product.brand_id')
-        ->select('product.id','product.name','product.price','product.pricesale','product.image','category.id as categoryid','category.name as categoryname','brand.name as brandname','product.status as status')
-        ->orderBy('product.created_at','desc')
-        ->get();
-        return view("backend.product.product",compact("list"));
+        // Debug: Add some logging
+        \Log::info('ProductController@index called', [
+            'search' => $request->get('search'),
+            'category' => $request->get('category'), 
+            'status' => $request->get('status'),
+            'all_params' => $request->all()
+        ]);
+        
+        // Build base query
+        $query = Product::where('product.status','!=',0)
+            ->join('category','category.id','=','product.category_id')
+            ->join('brand','brand.id','=','product.brand_id')
+            ->select('product.id','product.name','product.price','product.pricesale','product.image','product.qty','category.id as categoryid','category.name as categoryname','brand.name as brandname','product.status as status');
+        
+        // Apply search filter
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            \Log::info('Applying search filter', ['term' => $searchTerm]);
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('product.name', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('category.name', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('brand.name', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+        
+        // Apply category filter
+        if ($request->has('category') && !empty($request->category)) {
+            \Log::info('Applying category filter', ['category' => $request->category]);
+            $query->where('category.id', $request->category);
+        }
+        
+        // Apply status filter
+        if ($request->has('status') && $request->status !== '' && $request->status !== null) {
+            \Log::info('Applying status filter', ['status' => $request->status]);
+            $query->where('product.status', $request->status);
+        }
+        
+        // Log the final query
+        \Log::info('Final query SQL', ['sql' => $query->toSql()]);
+        
+        // Get all products for statistics (without filters)
+        $all_products = Product::where('product.status','!=',0)
+            ->join('category','category.id','=','product.category_id')
+            ->join('brand','brand.id','=','product.brand_id')
+            ->select('product.id','product.name','product.price','product.pricesale','product.image','product.qty','category.id as categoryid','category.name as categoryname','brand.name as brandname','product.status as status')
+            ->orderBy('product.created_at','desc')
+            ->get();
+        
+        // Get filtered and paginated products for display
+        $list_product = $query->orderBy('product.created_at','desc')->paginate(10);
+        
+        // Preserve query parameters in pagination
+        $list_product->appends($request->query());
+        
+        // Get all categories for filter dropdown (exclude "Hoa tươi" and "Dụng cụ chăm sóc hoa")
+        $categories = \App\Models\Category::where('status', '!=', 0)
+            ->whereNotIn('id', [1, 2]) // Exclude "Hoa tươi" (ID=1) and "Dụng cụ chăm sóc hoa" (ID=2)
+            ->get();
+        
+        // For backward compatibility, also pass as $list
+        $list = $list_product;
+        
+        return view("backend.product.product",compact("list_product", "list", "all_products", "categories"));
     }
 
     /**
@@ -35,13 +91,30 @@ class ProductController extends Controller
         ->select('product.id','product.name','product.image','brand.id as brandid','brand.name as brandname','category.id as categoryid','category.name as categoryname','brand.name as brandname')
         ->orderBy('product.created_at','desc')
         ->get();
+        
+        // Get categories directly from category table (exclude "Hoa tươi" and "Dụng cụ chăm sóc hoa")
+        $categories = \App\Models\Category::where('status', '!=', 0)
+            ->whereNotIn('id', [1, 2]) // Exclude "Hoa tươi" (ID=1) and "Dụng cụ chăm sóc hoa" (ID=2)
+            ->get();
+        
+        // Get brands from products
+        $brands = \App\Models\Brand::where('status', '!=', 0)->get();
+        
         $htmlcategoryid="";
         $htmlbrandid="";
-        foreach($list as $item)
+        
+        // Build category options (excluding the two hidden categories)
+        foreach($categories as $category)
         {
-            $htmlcategoryid .= "<option value='" . $item->categoryid . "'>" . $item->categoryname . "</option>";
-            $htmlbrandid .= "<option value='" . $item->brandid . "'>" . $item->brandname . "</option>";
+            $htmlcategoryid .= "<option value='" . $category->id . "'>" . $category->name . "</option>";
         }
+        
+        // Build brand options
+        foreach($brands as $brand)
+        {
+            $htmlbrandid .= "<option value='" . $brand->id . "'>" . $brand->name . "</option>";
+        }
+        
         return view("backend.product.create",compact("list","htmlcategoryid","htmlbrandid"));
     }
      
@@ -92,29 +165,40 @@ class ProductController extends Controller
             toastr()->error('The item does not exist.');
             return redirect()->route('admin.product.index');
         }
-        $list = Product::where('product.status','!=',0)
-        ->join('category','category.id','=','product.category_id')
-        ->join('brand','brand.id','=','product.brand_id')
-        ->select('product.id','product.name','product.image','brand.id as brandid','brand.name as brandname','category.id as categoryid','category.name as categoryname','brand.name as brandname')
-        ->orderBy('product.created_at','desc')
-        ->get();
+        
+        // Get categories directly from category table (exclude "Hoa tươi" and "Dụng cụ chăm sóc hoa")
+        $categories = \App\Models\Category::where('status', '!=', 0)
+            ->whereNotIn('id', [1, 2]) // Exclude "Hoa tươi" (ID=1) and "Dụng cụ chăm sóc hoa" (ID=2)
+            ->get();
+        
+        // Get brands from brand table
+        $brands = \App\Models\Brand::where('status', '!=', 0)->get();
+        
         $htmlcategoryid="";
         $htmlbrandid="";
-        foreach ($list as $item){
-            if($product->category_id==$item->categoryid)
+        
+        // Build category options (excluding the two hidden categories)
+        foreach ($categories as $category){
+            if($product->category_id == $category->id)
             {
-                $htmlcategoryid .= "<option selected value='" . $item->categoryid . "'>" . $item->categoryname . "</option>";            }
-            else {
-                $htmlcategoryid .= "<option value='" . $item->categoryid . "'>" . $item->categoryname . "</option>";            }
-            if($product->brand_id==$item->brandid)
-            {
-                $htmlbrandid .= "<option selected value='" . $item->brandid . "'>" . $item->brandname . "</option>";
-
+                $htmlcategoryid .= "<option selected value='" . $category->id . "'>" . $category->name . "</option>";
             }
-            else{
-                $htmlbrandid .= "<option value='" . $item->brandid . "'>" . $item->brandname . "</option>";
+            else {
+                $htmlcategoryid .= "<option value='" . $category->id . "'>" . $category->name . "</option>";
             }
         }
+        
+        // Build brand options
+        foreach ($brands as $brand){
+            if($product->brand_id == $brand->id)
+            {
+                $htmlbrandid .= "<option selected value='" . $brand->id . "'>" . $brand->name . "</option>";
+            }
+            else{
+                $htmlbrandid .= "<option value='" . $brand->id . "'>" . $brand->name . "</option>";
+            }
+        }
+        
         return view("backend.product.edit",compact("product","htmlcategoryid","htmlbrandid"));
     }
 
