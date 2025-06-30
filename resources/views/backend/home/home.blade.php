@@ -89,55 +89,15 @@
 
       <!-- Main Content -->
       <div class="row">
-        <div class="col-12">
+        <div class="col-12 text-center">
           <div class="card shadow-lg border-0 rounded-4">
             <div class="card-header bg-gradient-primary text-white">
               <h3 class="card-title mb-0">
-                <i class="fas fa-chart-line me-2"></i>Báo cáo bán hàng
+                <i class="fas fa-chart-line me-2"></i>Chào mừng đến với Admin Panel
               </h3>
             </div>
             <div class="card-body">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="info-box">
-                    <span class="info-box-icon bg-info">
-                      <i class="fas fa-money-bill-wave"></i>
-                    </span>
-                    <div class="info-box-content">
-                      <span class="info-box-text">Tổng doanh thu</span>
-                      <span class="info-box-number">{{ number_format($totalRevenue ?? 0, 0, ',', '.') }} đ</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="info-box">
-                    <span class="info-box-icon bg-success">
-                      <i class="fas fa-shopping-cart"></i>
-                    </span>
-                    <div class="info-box-content">
-                      <span class="info-box-text">Đơn hàng thành công</span>
-                      <span class="info-box-number">{{ $totalOrdersSuccess ?? 0 }}</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="info-box">
-                    <span class="info-box-icon bg-warning">
-                      <i class="fas fa-box"></i>
-                    </span>
-                    <div class="info-box-content">
-                      <span class="info-box-text">Sản phẩm đã bán</span>
-                      <span class="info-box-number">{{ $totalProductsSold ?? 0 }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row mt-4">
-                <div class="col-12 text-center">
-                  <h4 class="text-muted">Chào mừng đến với Admin Panel</h4>
-                  <p class="text-muted">Sử dụng menu bên trái để quản lý hệ thống</p>
-                </div>
-              </div>
+              <h4 class="text-muted">Sử dụng menu bên trái để quản lý hệ thống</h4>
             </div>
           </div>
         </div>
