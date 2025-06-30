@@ -22,12 +22,15 @@ class OrderController extends Controller
             ->select(
                 "order.id as orderid",
                 "order.*",
-                "user.name",
-                \DB::raw('COUNT(orderdetail.order_id) as total_products'),
-                \DB::raw('SUM(orderdetail.amount) as total_amount')
+                "user.name as customer_name",
+                "user.email as customer_email", 
+                "user.phone as customer_phone",
+                "user.address as customer_address",
+                \DB::raw('COUNT(ntdd_orderdetail.order_id) as total_products'),
+                \DB::raw('SUM(ntdd_orderdetail.amount) as total_amount')
             )
             ->groupBy('order.id', 'order.user_id', 'order.status', 'order.created_at', 
-                     'order.updated_at', 'order.updated_by', 'user.name')
+                     'order.updated_at', 'order.updated_by', 'user.name', 'user.email', 'user.phone', 'user.address')
             ->get();
         return view("backend.order.order",compact('list'));
     }
@@ -92,15 +95,14 @@ class OrderController extends Controller
     }
     public function show(string $id)
     {
-        $order = Order::join('user', 'order.user_id', '=', 'user.id')
-                      ->where('order.id', $id)
-                      ->select('order.*', 'user.name as username')
-                      ->first();
+        // Sử dụng Eloquent relationships để lấy thông tin từ user
+        $order = Order::with('user')->find($id);
         
         if (!$order) {
             toastr()->error('The order does not exist.');
             return redirect()->route('admin.order.index');
         }
+        
         return view("backend.order.show", compact("order"));
     }
     

@@ -55,7 +55,17 @@ Dưới đây là một số ảnh chụp giao diện hệ thống FlowerSeller 
 ### Trang quản lý menu
 ![Giao diện menu](public/images/screenshots/admin-menu.png)
 
-> *Lưu ý: Đường dẫn ảnh chỉ là ví dụ, bạn hãy thay bằng ảnh chụp thực tế của hệ thống tại thư mục `public/images/screenshots/`.*
+### Trang quản lý người dùng
+![Giao diện danh sách người dùng](public/images/screenshots/admin-user-list.png)
+
+### Trang thêm người dùng
+![Giao diện thêm người dùng](public/images/screenshots/admin-user-create.png)
+
+### Trang sửa người dùng
+![Giao diện sửa người dùng](public/images/screenshots/admin-user-edit.png)
+
+### Trang thùng rác người dùng
+![Giao diện thùng rác người dùng](public/images/screenshots/admin-user-trash.png)
 
 ## 6. Bảo mật & Xử lý dữ liệu
 

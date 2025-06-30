@@ -73,7 +73,7 @@
                     <i class="fas fa-user me-2 text-primary"></i>Khách hàng & Thời gian
                   </th>
                   <th class="border-0 py-3">
-                    <i class="fas fa-truck me-2 text-success"></i>Giao hàng
+                    <i class="fas fa-truck me-2 text-success"></i>Địa chỉ giao hàng
                   </th>
                   <th class="border-0 py-3">
                     <i class="fas fa-envelope me-2 text-info"></i>Liên hệ
@@ -83,9 +83,6 @@
                   </th>
                   <th class="border-0 py-3">
                     <i class="fas fa-money-bill-wave me-2 text-success"></i>Tổng tiền
-                  </th>
-                  <th class="border-0 py-3">
-                    <i class="fas fa-sticky-note me-2 text-secondary"></i>Ghi chú
                   </th>
                   <th class="text-center border-0 py-3">
                     <i class="fas fa-cogs me-2 text-dark"></i>Thao tác
@@ -101,7 +98,7 @@
                           <i class="fas fa-user text-white"></i>
                         </div>
                         <div>
-                          <div class="fw-bold text-dark">{{ $row->name }}</div>
+                          <div class="fw-bold text-dark">{{ $row->customer_name }}</div>
                           <small class="text-muted">ID: #{{ $row->orderid }}</small>
                           <div class="small text-info">
                             <i class="fas fa-calendar me-1"></i>{{ date('d/m/Y H:i', strtotime($row->created_at)) }}
@@ -111,21 +108,23 @@
                     </td>
                     <td class="align-middle">
                       <div class="delivery-info">
-                        <span class="text-muted fst-italic">
-                          <i class="fas fa-info-circle me-1"></i>Thông tin giao hàng sẽ được cập nhật từ đơn hàng
-                        </span>
-                        <div class="mt-1">
-                          <small class="text-secondary">Đơn hàng được tạo bởi khách hàng</small>
+                        <div class="text-muted">
+                          <i class="fas fa-map-marker-alt me-2 text-danger"></i>
+                          {{ $row->customer_address ?? 'Chưa có địa chỉ' }}
                         </div>
                       </div>
                     </td>
                     <td class="align-middle">
                       <div class="contact-info">
-                        <span class="text-muted fst-italic">
-                          <i class="fas fa-info-circle me-1"></i>Thông tin liên hệ sẽ được cập nhật từ thông tin khách hàng
-                        </span>
-                        <div class="mt-1">
-                          <small class="text-secondary">User ID: {{ $row->user_id }}</small>
+                        <div class="text-muted small">
+                          <div class="mb-1">
+                            <i class="fas fa-phone me-1 text-success"></i>
+                            {{ $row->customer_phone ?? 'Chưa có SĐT' }}
+                          </div>
+                          <div>
+                            <i class="fas fa-envelope me-1 text-primary"></i>
+                            {{ $row->customer_email ?? 'Chưa có email' }}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -147,13 +146,6 @@
                             <i class="fas fa-minus me-1"></i>Chưa có giá trị
                           </span>
                         @endif
-                      </div>
-                    </td>
-                    <td class="align-middle">
-                      <div class="text-muted">
-                        <span class="fst-italic">
-                          <i class="fas fa-info-circle me-1"></i>Ghi chú sẽ được cập nhật khi chỉnh sửa đơn hàng
-                        </span>
                       </div>
                     </td>
                     <td class="text-center align-middle">
