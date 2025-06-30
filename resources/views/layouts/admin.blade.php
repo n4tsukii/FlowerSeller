@@ -572,27 +572,7 @@
               </li>
             </ul>
           </li>
-
-          <!-- Analytics -->
-          <li class="nav-header">ANALYTICS</li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie text-info"></i>
-              <p>Báo cáo bán hàng</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-bar text-warning"></i>
-              <p>Thống kê truy cập</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-star text-yellow"></i>
-              <p>Đánh giá sản phẩm</p>
-            </a>
-          </li>
+          <!-- Kết thúc Users Section -->
         </ul>
       </nav>
     </div>
