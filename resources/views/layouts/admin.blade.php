@@ -511,10 +511,7 @@
           <li class="nav-item">
             <a href="{{route('admin.order.index')}}" class="nav-link">
               <i class="fas fa-shopping-cart nav-icon"></i>
-              <p>
-                Đơn hàng
-                <span class="badge bg-danger right">5</span>
-              </p>
+              <p>Đơn hàng</p>
             </a>
           </li>
 
