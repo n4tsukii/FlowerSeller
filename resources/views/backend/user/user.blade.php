@@ -1,6 +1,6 @@
 
 @extends('layouts.admin')
-@section('title','Users Management')
+@section('title','Quản Lý Người Dùng')
 @section('content')
 <div class="content-wrapper">
     <!-- CONTENT -->
@@ -9,14 +9,14 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="text-gradient fw-bold">
-              <i class="fas fa-users me-2"></i>Users Management
+              <i class="fas fa-users me-2"></i>Quản Lý Người Dùng
             </h1>
           </div>
           <div class="col-sm-6">
             <nav aria-label="breadcrumb" class="float-sm-right">
               <ol class="breadcrumb bg-transparent mb-0">
-                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}" class="text-primary">Dashboard</a></li>
-                <li class="breadcrumb-item active text-secondary">Users</li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}" class="text-primary">Bảng Điều Khiển</a></li>
+                <li class="breadcrumb-item active text-secondary">Người Dùng</li>
               </ol>
             </nav>
           </div>
@@ -30,9 +30,9 @@
           <div class="row align-items-center">
             <div class="col-md-6">
               <h4 class="mb-0 fw-bold">
-                <i class="fas fa-users me-2"></i>All Users
+                <i class="fas fa-users me-2"></i>Tất Cả Người Dùng
               </h4>
-              <small class="opacity-75">Manage system users and administrators</small>
+              <small class="opacity-75">Quản lý người dùng và quản trị viên hệ thống</small>
             </div>
             <div class="col-md-6">
               <!-- Search and Filter -->
@@ -42,14 +42,14 @@
                     <span class="input-group-text bg-white border-end-0">
                       <i class="fas fa-search text-muted"></i>
                     </span>
-                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Search users..." id="searchInput">
+                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Tìm kiếm người dùng..." id="searchInput">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <select class="form-select" id="statusFilter">
-                    <option value="">All Status</option>
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
+                    <option value="">Tất Cả Trạng Thái</option>
+                    <option value="1">Đang Hoạt Động</option>
+                    <option value="0">Không Hoạt Động</option>
                   </select>
                 </div>
               </div>
@@ -60,10 +60,10 @@
           <div class="row mt-3">
             <div class="col-12 text-end">
               <a href="{{route('admin.user.create')}}" class="btn btn-light btn-sm rounded-pill shadow-sm me-2 hover-lift">
-                <i class="fas fa-plus me-1"></i>Add New User
+                <i class="fas fa-plus me-1"></i>Thêm Người Dùng Mới
               </a>
               <a href="{{ route('admin.user.trash') }}" class="btn btn-outline-light btn-sm rounded-pill shadow-sm hover-lift">
-                <i class="fas fa-trash me-1"></i>Trash Bin
+                <i class="fas fa-trash me-1"></i>Thùng Rác
               </a>
             </div>
           </div>
@@ -74,22 +74,22 @@
               <thead class="bg-light">
                 <tr>
                   <th class="border-0 py-3">
-                    <i class="fas fa-user me-2 text-primary"></i>Profile
+                    <i class="fas fa-user me-2 text-primary"></i>Hồ Sơ
                   </th>
                   <th class="border-0 py-3">
-                    <i class="fas fa-id-card me-2 text-success"></i>Personal Info
+                    <i class="fas fa-id-card me-2 text-success"></i>Thông Tin Cá Nhân
                   </th>
                   <th class="border-0 py-3">
-                    <i class="fas fa-envelope me-2 text-info"></i>Contact
+                    <i class="fas fa-envelope me-2 text-info"></i>Liên Hệ
                   </th>
                   <th class="border-0 py-3">
-                    <i class="fas fa-user-tag me-2 text-warning"></i>Role
+                    <i class="fas fa-user-tag me-2 text-warning"></i>Vai Trò
                   </th>
                   <th class="text-center border-0 py-3">
-                    <i class="fas fa-toggle-on me-2 text-secondary"></i>Status
+                    <i class="fas fa-toggle-on me-2 text-secondary"></i>Trạng Thái
                   </th>
                   <th class="text-center border-0 py-3">
-                    <i class="fas fa-cogs me-2 text-dark"></i>Actions
+                    <i class="fas fa-cogs me-2 text-dark"></i>Thao Tác
                   </th>
                 </tr>
               </thead>
@@ -121,15 +121,15 @@
                         <div class="d-flex align-items-center mb-1">
                           @if ($row->gender == 'male' || $row->gender == 1)
                             <span class="badge bg-primary rounded-pill me-2">
-                              <i class="fas fa-mars me-1"></i>Male
+                              <i class="fas fa-mars me-1"></i>Nam
                             </span>
                           @elseif ($row->gender == 'female' || $row->gender == 2)
                             <span class="badge bg-pink rounded-pill me-2">
-                              <i class="fas fa-venus me-1"></i>Female
+                              <i class="fas fa-venus me-1"></i>Nữ
                             </span>
                           @else
                             <span class="badge bg-secondary rounded-pill me-2">
-                              <i class="fas fa-question me-1"></i>{{ $row->gender ?: 'N/A' }}
+                              <i class="fas fa-question me-1"></i>{{ $row->gender ?: 'Không có' }}
                             </span>
                           @endif
                         </div>
@@ -179,11 +179,11 @@
                     <td class="text-center align-middle">
                       @if ($row->status == 1)
                         <span class="badge bg-gradient-success rounded-pill px-3 py-2">
-                          <i class="fas fa-check-circle me-1"></i>Active
+                          <i class="fas fa-check-circle me-1"></i>Đang Hoạt Động
                         </span>
                       @else
                         <span class="badge bg-gradient-secondary rounded-pill px-3 py-2">
-                          <i class="fas fa-pause-circle me-1"></i>Inactive
+                          <i class="fas fa-pause-circle me-1"></i>Không Hoạt Động
                         </span>
                       @endif
                     </td>
@@ -195,30 +195,25 @@
                         @if ($row->status==1)
                         <a href="{{ route('admin.user.status', $args) }}" 
                            class="btn btn-sm btn-outline-success rounded-pill me-1 hover-lift"
-                           title="Deactivate">
+                           title="Tắt hoạt động">
                             <i class="fas fa-toggle-on"></i>
                         </a>
                         @else
                         <a href="{{ route('admin.user.status', $args) }}" 
                            class="btn btn-sm btn-outline-secondary rounded-pill me-1 hover-lift"
-                           title="Activate">
+                           title="Bật hoạt động">
                             <i class="fas fa-toggle-off"></i>
                         </a>
                         @endif
-                        <a href="{{ route('admin.user.show', $args) }}" 
-                           class="btn btn-sm btn-outline-info rounded-pill me-1 hover-lift"
-                           title="View Details">
-                            <i class="fas fa-eye"></i>
-                        </a>
                         <a href="{{ route('admin.user.edit', $args) }}" 
                            class="btn btn-sm btn-outline-primary rounded-pill me-1 hover-lift"
-                           title="Edit">
+                           title="Chỉnh sửa">
                             <i class="fas fa-edit"></i>
                         </a>
                         <a href="{{ route('admin.user.delete', $args) }}" 
                            class="btn btn-sm btn-outline-danger rounded-pill hover-lift"
-                           title="Delete"
-                           onclick="return confirm('Are you sure you want to delete this user?')">
+                           title="Xóa"
+                           onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?')">
                             <i class="fas fa-trash"></i>
                         </a>
                       </div>

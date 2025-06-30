@@ -37,35 +37,48 @@ FlowerSeller là hệ thống thương mại điện tử chuyên về bán hoa,
 ## 5. Giao diện hệ thống
 Dưới đây là một số ảnh chụp giao diện hệ thống FlowerSeller sau khi hiện đại hóa và đồng bộ UI/UX:
 
-### Trang quản trị danh mục sản phẩm
+### Giao diện khách hàng
+
+#### Trang chủ
+![Trang chủ website](public/images/screenshots/home.png)
+
+#### Trang danh sách sản phẩm
+![Danh sách sản phẩm](public/images/screenshots/products.png)
+
+#### Trang chi tiết sản phẩm
+![Chi tiết sản phẩm](public/images/screenshots/product-detail.png)
+
+#### Trang giỏ hàng
+![Giỏ hàng](public/images/screenshots/cart.png)
+
+#### Trang đăng nhập
+![Đăng nhập](public/images/screenshots/login.png)
+
+#### Trang đăng ký
+![Đăng ký](public/images/screenshots/register.png)
+
+### Giao diện quản trị viên
+
+#### Trang quản lý người dùng
+![Quản lý người dùng](public/images/screenshots/admin-user-list.png)
+
+#### Trang quản trị danh mục sản phẩm
 ![Giao diện danh mục](public/images/screenshots/admin-category.png)
 
-### Trang quản trị thương hiệu
+#### Trang quản trị thương hiệu
 ![Giao diện thương hiệu](public/images/screenshots/admin-brand.png)
 
-### Trang quản trị bài viết
+#### Trang quản trị bài viết
 ![Giao diện bài viết](public/images/screenshots/admin-post.png)
 
-### Trang quản trị chủ đề
+#### Trang quản trị chủ đề
 ![Giao diện chủ đề](public/images/screenshots/admin-topic.png)
 
-### Trang quản lý đơn hàng
+#### Trang quản lý đơn hàng
 ![Giao diện đơn hàng](public/images/screenshots/admin-order.png)
 
-### Trang quản lý menu
+#### Trang quản lý menu
 ![Giao diện menu](public/images/screenshots/admin-menu.png)
-
-### Trang quản lý người dùng
-![Giao diện danh sách người dùng](public/images/screenshots/admin-user-list.png)
-
-### Trang thêm người dùng
-![Giao diện thêm người dùng](public/images/screenshots/admin-user-create.png)
-
-### Trang sửa người dùng
-![Giao diện sửa người dùng](public/images/screenshots/admin-user-edit.png)
-
-### Trang thùng rác người dùng
-![Giao diện thùng rác người dùng](public/images/screenshots/admin-user-trash.png)
 
 ## 6. Bảo mật & Xử lý dữ liệu
 
@@ -100,3 +113,26 @@ Dưới đây là một số ảnh chụp giao diện hệ thống FlowerSeller 
 6. **Truy cập:**
    - Trang khách: http://localhost:8000
    - Trang admin: http://localhost:8000/admin (tài khoản mẫu trong seed hoặc tạo mới)
+
+## 8. Tính năng nổi bật
+
+- **Giao diện responsive:** Tối ưu cho desktop
+- **Quản lý đa dạng:** Sản phẩm, đơn hàng, người dùng, nội dung
+- **Bảo mật cao:** Validation đầy đủ, phân quyền rõ ràng
+- **UI/UX hiện đại:** Badge, icon, animation mượt mà
+- **Tiếng Việt hoàn chỉnh:** Giao diện và thông báo đồng bộ
+
+## 9. Cấu trúc thư mục chính
+
+```
+FlowerSeller/
+├── app/                    # Logic ứng dụng
+│   ├── Http/Controllers/   # Controllers
+│   ├── Models/            # Models Eloquent
+│   └── ...
+├── database/              # Migration, seeder
+├── public/               # Assets công khai
+├── resources/            # Views, CSS, JS
+├── routes/               # Định tuyến
+└── storage/              # Lưu trữ file
+```
