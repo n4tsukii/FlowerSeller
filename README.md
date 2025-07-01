@@ -89,6 +89,9 @@ Dưới đây là một số ảnh chụp giao diện hệ thống FlowerSeller 
 #### Trang quản lý đơn hàng
 ![Giao diện đơn hàng](public/images/screenshots/admin-order.png)
 
+#### Trang thông tin liên hệ
+![Thông tin người dùng cần liên hệ](public/images/screenshots/admin-contact.png)
+
 #### Trang quản lý menu
 ![Giao diện menu](public/images/screenshots/admin-menu.png)
 
