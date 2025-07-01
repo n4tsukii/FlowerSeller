@@ -1,5 +1,6 @@
 # FlowerSeller - Hệ Thống Quản Lý & Bán Hoa Trực Tuyến
 # Sinh viên thực hiện: Phạm Như Thuật / MSSV: 22010498
+# Link repo: https://github.com/n4tsukii/FlowerSeller
 
 ## 1. Giới thiệu dự án
 
