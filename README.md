@@ -48,6 +48,12 @@ Dưới đây là một số ảnh chụp giao diện hệ thống FlowerSeller 
 #### Trang chi tiết sản phẩm
 ![Chi tiết sản phẩm](public/images/screenshots/product-detail.png)
 
+#### Trang liên hệ
+![Liên hệ](public/images/screenshots/contact.png)
+
+#### Trang bài viết
+![Bài viết](public/images/screenshots/post.png)
+
 #### Trang giỏ hàng
 ![Giỏ hàng](public/images/screenshots/cart.png)
 
@@ -59,8 +65,14 @@ Dưới đây là một số ảnh chụp giao diện hệ thống FlowerSeller 
 
 ### Giao diện quản trị viên
 
+#### Trang chủ chính
+![Trang chủ chính](public/images/screenshots/trang-chu-chinh.png)
+
 #### Trang quản lý người dùng
 ![Quản lý người dùng](public/images/screenshots/admin-user-list.png)
+
+#### Trang quản lý sản phẩm
+![Giao diện sản phẩm](public/images/screenshots/admin-product.png)
 
 #### Trang quản trị danh mục sản phẩm
 ![Giao diện danh mục](public/images/screenshots/admin-category.png)
