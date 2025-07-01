@@ -98,8 +98,48 @@ Dưới đây là một số ảnh chụp giao diện hệ thống FlowerSeller 
 ## 6. Bảo mật & Xử lý dữ liệu
 
 - **Validation:** Sử dụng validation Laravel cho mọi form (đăng ký, đăng nhập, đặt hàng, quản trị)
+```bash
+<?php
+// Validation đăng nhập
+$request->validate([
+    'username' => 'required|string',
+    'password' => 'required|string',
+]);
+
+// Validation đăng ký
+$data = $request->validate([
+    'name' => 'required|string|max:255',
+    'email' => 'required|string|email|max:255|unique:users,email',
+    'password' => 'required|string|min:6|confirmed',
+    // ... các field khác
+]);
+```
 - **XSS/SQL Injection:** Escape dữ liệu, kiểm tra đầu vào, sử dụng Eloquent ORM
+```bash
+<?php
+// Sử dụng Eloquent thay vì raw SQL
+$user = User::where($field, $request->username)->first();
+```
 - **Quyền truy cập:** Phân quyền rõ ràng giữa khách và admin
+```bash
+<?php
+public function handle(Request $request, Closure $next): Response
+{
+    // Kiểm tra đăng nhập
+    if (!auth()->check()) {
+        toastr()->error('Please login to access admin panel.');
+        return redirect()->route('website.getlogin');
+    }
+    
+    // Kiểm tra quyền admin
+    if (auth()->user()->roles !== 'admin') {
+        toastr()->error('Access denied. Admin privileges required.');
+        return redirect()->route('site.home');
+    }
+    
+    return $next($request);
+}
+```
 - **Xử lý lỗi:** Thông báo rõ ràng, log lỗi hệ thống
 
 ## 7. Hướng dẫn cài đặt & sử dụng
